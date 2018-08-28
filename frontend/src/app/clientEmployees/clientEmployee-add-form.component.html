@@ -1,0 +1,44 @@
+<div>
+  <h2>Nouveau Client Employee</h2>
+
+  <form [formGroup]="clientEmployeeForm" (ngSubmit)="clientEmployeeForm.valid && saveClientEmployee()">
+    <table>    
+      <tr>    
+        <td>
+          <mat-form-field>
+            <input matInput id="firstName" formControlName="firstName" [(ngModel)]="clientEmployee.firstName" placeholder="Prénom">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="lastName" formControlName="lastName" [(ngModel)]="clientEmployee.lastName" placeholder="Nom">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="email" formControlName="email" [(ngModel)]="clientEmployee.email" placeholder="Email">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="tel" formControlName="tel" [(ngModel)]="clientEmployee.tel" placeholder="Téléphone">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="title" formControlName="title" [(ngModel)]="clientEmployee.title" placeholder="Poste">
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    <button mat-raised-button type="submit" color="primary">Sauvegarder</button>
+  </form>
+</div>

@@ -1,0 +1,103 @@
+<div>
+  <h2>Nouveau Projet</h2>
+
+  <form [formGroup]="projectForm" (ngSubmit)="projectForm.valid && saveProject()">
+    <table>    
+      <tr>    
+        <td>
+          <mat-form-field>
+            <mat-select placeholder="Mes Consultants" [formControl]="consultantControl">
+              <mat-option *ngFor="let consultant of consultantsList" [value]="consultant">
+                {{consultant.lastName}} {{consultant.firstName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Id" formControlName="consultant_id" [(ngModel)]="project.consultant_id" value="{{consultantControl.value?.id}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Nom" value="{{consultantControl.value?.lastName}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Prénom" value="{{consultantControl.value?.firstName}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Email" value="{{consultantControl.value?.email}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Téléphone" value="{{consultantControl.value?.tel}}" >
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>    
+        <td>
+          <mat-form-field>
+            <mat-select placeholder="Mes Clients" [formControl]="clientControl">
+              <mat-option *ngFor="let client of clientsList" [value]="client">
+                {{client.name}}, {{client.address}} - {{client.city}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Id" formControlName="client_id" [(ngModel)]="project.client_id" value="{{clientControl.value?.id}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Nom" value="{{clientControl.value?.name}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Adresse" value="{{clientControl.value?.address}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Code Postal" value="{{clientControl.value?.cp}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Ville" value="{{clientControl.value?.city}}" >
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput [matDatepicker]="start_date" placeholder="Choissiez une date" formControlName="start_date" [(ngModel)]="project.start_date" [value]="date.value" >
+            <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
+            <mat-datepicker #start_date></mat-datepicker>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput [matDatepicker]="end_date" placeholder="Choissiez une date" formControlName="end_date" [(ngModel)]="project.end_date" [value]="date.value" >
+            <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
+            <mat-datepicker #end_date></mat-datepicker>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    <button mat-raised-button type="submit" color="primary">Sauvegarder</button>
+  </form>
+</div>

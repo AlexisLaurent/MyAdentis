@@ -1,0 +1,49 @@
+<mat-toolbar color="primary" class="mat-elevation-z10">
+
+  <div class="menu-left">
+    <button mat-button class="accueil" routerLink="/">
+         <span> My Adentis </span>
+    </button>
+    <button mat-button  class="meetings" routerLink="/meetings">
+      <span>Mes Réunions</span>
+    </button>
+    <button mat-button class="consultants" routerLink="/consultants">
+      <span>Mes Consultants</span>
+    </button>
+    <button mat-button class="clients" routerLink="/clients">
+      <span>Mes Clients</span>
+    </button>
+     <button mat-button class="clients" routerLink="/projects">
+      <span>Mes Projets</span>
+    </button>
+    <button mat-button class="clients" routerLink="/managers">
+      <span>Managers</span>
+    </button>
+  </div>
+
+  <span class="fill-remaining-space"></span>
+
+  <div class="menu-right">
+    <button mat-icon-button [matMenuTriggerFor]="settings">
+      <mat-icon>settings</mat-icon>
+    </button>
+    <mat-menu #settings="matMenu">
+      <span mat-menu-item disabled>
+        <mat-icon>account_circle</mat-icon><span>Alexis LAURENT</span>
+      </span>
+      <button mat-menu-item>
+        <span>Mon profil</span>
+      </button>
+      <button mat-menu-item>
+        <span>Changer mon mot de passe</span>
+      </button>
+      <button mat-menu-item>
+        <span>Notifications</span>
+      </button>
+    </mat-menu>
+  </div>
+
+</mat-toolbar>
+<div class="view-container">
+	<router-outlet></router-outlet>
+</div>

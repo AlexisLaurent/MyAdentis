@@ -1,0 +1,37 @@
+<div>
+  <h2>Editer Client</h2>
+
+  <form [formGroup]="clientForm" (ngSubmit)="clientForm.valid && updateClient()">
+    <table>    
+      <tr>    
+        <td>
+          <mat-form-field>
+            <input matInput id="name" formControlName="name"  placeholder="Nom">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="address" formControlName="address"  placeholder="Adresse">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="cp" formControlName="cp"  placeholder="Code Postal">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="city" formControlName="city" placeholder="Ville">
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    <button mat-raised-button type="submit" color="primary">Sauvegarder</button>
+  </form>
+</div>

@@ -1,0 +1,37 @@
+<div>
+  <h2>Nouveau Consultant</h2>
+
+  <form [formGroup]="consultantForm" (ngSubmit)="consultantForm.valid && saveConsultant()">
+    <table>    
+      <tr>    
+        <td>
+          <mat-form-field>
+            <input matInput id="firstName" formControlName="firstName" [(ngModel)]="consultant.firstName" placeholder="Prénom">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="lastName" formControlName="lastName" [(ngModel)]="consultant.lastName" placeholder="Nom">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="email" formControlName="email" [(ngModel)]="consultant.email" placeholder="Email">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="tel" formControlName="tel" [(ngModel)]="consultant.tel" placeholder="Téléphone">
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    <button mat-raised-button type="submit" color="primary">Sauvegarder</button>
+  </form>
+</div>
