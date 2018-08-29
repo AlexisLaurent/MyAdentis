@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {Subscription} from 'rxjs';
-import {mergeMap} from 'rxjs/add/operator';
+//import {mergeMap} from 'rxjs/add/operator';
 import {Project} from './project.model';
 import {ProjectsApiService} from './projects-api.service';
 import {Consultant} from '../consultants/consultant.model';

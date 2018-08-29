@@ -3,8 +3,12 @@ import {HttpClient} from '@angular/common/http';
 import {Router, ActivatedRoute, Params} from "@angular/router";
 import {Client} from './client.model';
 import {ClientsApiService} from './clients-api.service';
+import {ClientEmployee} from '../clientEmployees/clientEmployee.model';
+import {ClientEmployeesApiService} from '../clientEmployees/clientEmployees-api.service';
 import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
+import {concatMap, tap} from 'rxjs/operators';
+import {MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'client-edit-form',
@@ -18,14 +22,16 @@ export class ClientEditFormComponent implements OnInit {
   clientsListSubs: Subscription;
   clientForm: FormGroup;
 
-  constructor(private clientsApi: ClientsApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) { }
+  clientEmployeesList: ClientEmployee[];
+  dataSource: MatTableDataSource<ClientEmployee>;
+
+  constructor(private clientsApi: ClientsApiService, private clientEmployeesApi: ClientEmployeesApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
 
-    let clientId = localStorage.getItem("editClientId");
+    let clientId = parseInt(this.activatedRoute.snapshot.params["id"]);
 
     this.clientForm = this.formBuilder.group({
-      id : [],
       name: ['', Validators.required],
       address: ['', Validators.required],
       cp: ['', Validators.required],
@@ -34,20 +40,43 @@ export class ClientEditFormComponent implements OnInit {
 
     this.clientsListSubs = this.clientsApi
       .getClient(clientId)
+      .pipe(
+        tap(res => {
+          this.client = res[0];
+          this.clientForm.setValue({
+            name: res[0].name,
+            address: res[0].address,
+            cp: res[0].cp,
+            city: res[0].city,
+          });
+        }),
+        concatMap(res => this.clientEmployeesApi.getClientEmployeesForClient(this.client.id))
+      )
       .subscribe(res => {
-          this.clientForm.setValue(res);
+          this.dataSource = new MatTableDataSource(res);
         },
         console.error
       );
   }
 
   updateClient() {
+    this.client.name = this.clientForm.get('name').value;
+    this.client.address = this.clientForm.get('address').value;
+    this.client.cp = this.clientForm.get('cp').value;
+    this.client.city = this.clientForm.get('city').value;
+
     this.clientsApi
-      .saveClient(this.clientForm.value)
+      .updateClient(this.client)
       .subscribe(
         () => this.router.navigate(['/clients']),
         error => alert(error.message)
       );
+  }
+
+  displayedColumns: string[] = ['firstName','lastName','email','tel', 'title', 'edit'];
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 }

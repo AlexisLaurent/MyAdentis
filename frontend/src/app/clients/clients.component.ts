@@ -39,10 +39,4 @@ export class ClientsComponent implements OnInit, OnDestroy {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
-  editClient(client: Client): void {
-    localStorage.removeItem("editClientId");
-    localStorage.setItem("editClientId", client.id.toString());
-    this.router.navigate(['edit-client']);
-  };
 }

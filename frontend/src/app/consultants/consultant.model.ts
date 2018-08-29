@@ -1,13 +1,11 @@
 export class Consultant {
-  constructor(
-    public firstName: string,
-    public lastName: string,
-    public email: string,
-    public tel: string,
-    public manager_id: number,
-    public _id?: number,
-    public updatedAt?: Date,
-    public createdAt?: Date,
-    public lastUpdatedBy?: string,
-  ) { }
+    firstName: string;
+    lastName: string;
+    email: string;
+    tel: string;
+    manager_id: number;
+    id?: number;
+    updatedAt?: Date;
+    createdAt?: Date;
+    lastUpdatedBy?: string;
 }

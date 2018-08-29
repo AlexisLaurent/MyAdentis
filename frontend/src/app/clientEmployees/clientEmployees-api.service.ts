@@ -25,8 +25,30 @@ export class ClientEmployeesApiService {
       );
   }
 
+  // GET list of public, future events
+  getClientEmployeesForClient(client_id: Number): Observable<ClientEmployee[]> {
+    return this.http
+      .get<ClientEmployee[]>(this.API_URL + "/clientEmployees/" + client_id)
+      .pipe(
+        catchError(ClientEmployeesApiService._handleError)
+      );
+  }
+
+  getClientEmployee(id: Number): Observable<ClientEmployee> {
+    return this.http
+      .get<ClientEmployee>(this.API_URL + "/clientEmployee/" + id)
+      .pipe(
+        catchError(ClientEmployeesApiService._handleError)
+      );
+  }
+
   saveClientEmployee(clientEmployee: ClientEmployee): Observable<any> {
     return this.http
       .post(this.API_URL + "/clientEmployees", clientEmployee);
+  }
+
+  updateClientEmployee(clientEmployee: ClientEmployee): Observable<any> {
+    return this.http
+      .post(this.API_URL + "/clientEmployees/" + clientEmployee.id, clientEmployee);
   }
 }

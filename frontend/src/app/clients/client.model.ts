@@ -1,10 +1,10 @@
 export class Client {
-    name: String,
-    address: String,
-    cp: String,
-    city: String,
-    _id?: number,
-    updatedAt?: Date,
-    createdAt?: Date,
-    lastUpdatedBy?: string,
+    name: string;
+    address: string;
+    cp: string;
+    city: string;
+    id?: number;
+    updatedAt?: Date;
+    createdAt?: Date;
+    lastUpdatedBy?: string;
 }

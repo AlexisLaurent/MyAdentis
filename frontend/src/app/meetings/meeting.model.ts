@@ -1,19 +1,17 @@
 export class Meeting {
-  constructor(
-    public _id: number,
-    public project_id: number,
-    public date: Date,
-    public subject: string,
-    public project_bilan1: string,
-    public project_bilan2: string,
-    public adentis_bilan1: string,
-    public adentis_bilan2: string,
-    public adentis_bilan3: string,
-    public manager_signature: Blob,
-    public consultant_signature: Blob,
-    public client_signature: Blob,
-    public updatedAt: Date,
-    public createdAt: Date,
-    public lastUpdatedBy: string,
-  ) { }
+    project_id: number;
+    date: Date;
+    subject: string;
+    project_bilan1: string;
+    project_bilan2: string;
+    adentis_bilan1: string;
+    adentis_bilan2: string;
+    adentis_bilan3: string;
+    manager_signature: Blob;
+    consultant_signature: Blob;
+    client_signature: Blob;
+    id?: number;
+    updatedAt?: Date;
+    createdAt?: Date;
+    lastUpdatedBy?: string;
 }

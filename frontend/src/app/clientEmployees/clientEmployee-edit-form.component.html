@@ -1,0 +1,44 @@
+<div>
+  <h2>Editer Client Employee</h2>
+
+  <form [formGroup]="clientEmployeeForm" (ngSubmit)="clientEmployeeForm.valid && updateClientEmployee()">
+    <table>    
+      <tr>    
+        <td>
+          <mat-form-field>
+            <input matInput id="firstName" formControlName="firstName"  placeholder="Prénom">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="lastName" formControlName="lastName"  placeholder="Nom">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="email" formControlName="email"  placeholder="Email">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="tel" formControlName="tel" placeholder="Téléphone">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="title" formControlName="title" placeholder="Poste">
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    <button mat-raised-button type="submit" color="primary">Sauvegarder</button>
+  </form>
+</div>

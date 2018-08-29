@@ -36,9 +36,10 @@ export class ClientAddFormComponent implements OnInit {
   saveClient() {
     this.clientsApi
       .saveClient(this.client)
-      .subscribe(
-        () => this.router.navigate(['/clients']),
-        error => alert(error.message)
+      .subscribe(res => {
+          this.router.navigate(['/edit-client/' + res.id]);
+        },
+        console.error
       );
   }
 

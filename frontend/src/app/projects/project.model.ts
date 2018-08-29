@@ -4,7 +4,7 @@ export class Project {
     client_id: number;
     start_date: Date;
     end_date: Date;
-    _id?: number;
+    id?: number;
     updatedAt?: Date;
     createdAt?: Date;
     lastUpdatedBy?: string;

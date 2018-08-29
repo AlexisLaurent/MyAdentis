@@ -67,6 +67,24 @@ def add_client():
     session.close()
     return jsonify(new_client), 201
 
+@app.route('/clients/<id>', methods=['POST'])
+def update_client(id):
+    # fetching from the database
+    session = Session()
+    client_object = session.query(Client).get(id)
+
+    client_object.name = request.get_json().get('name'),
+    client_object.address = request.get_json().get('address'),
+    client_object.cp = request.get_json().get('cp'),
+    client_object.city = request.get_json().get('city'),
+
+    session.commit()
+
+    # return created obj
+    new_client = ClientSchema().dump(client_object).data
+    session.close()
+    return jsonify(new_client), 201
+
 # CLIENT EMPLOYEE
 @app.route('/clientEmployees')
 def get_clientEmployees():
@@ -81,6 +99,34 @@ def get_clientEmployees():
     # serializing as JSON
     session.close()
     return jsonify(clientEmployees.data)
+
+@app.route('/clientEmployees/<client_id>')
+def get_clientEmployeesForClient(client_id):
+    # fetching from the database
+    session = Session()
+    clientEmployee_objects = session.query(ClientEmployee).filter_by(client_id=client_id).all()
+
+    # transforming into JSON-serializable objects
+    schema = ClientEmployeeSchema(many=True)
+    clientEmployees = schema.dump(clientEmployee_objects)
+
+    # serializing as JSON
+    session.close()
+    return jsonify(clientEmployees.data)
+
+@app.route('/clientEmployee/<id>')
+def get_clientEmployee(id):
+    # fetching from the database
+    session = Session()
+    clientEmployee_object = session.query(ClientEmployee).get(id)
+
+    # transforming into JSON-serializable objects
+    schema = ClientEmployeeSchema()
+    clientEmployee = schema.dump(clientEmployee_object)
+
+    # serializing as JSON
+    session.close()
+    return jsonify(clientEmployee)
 
 @app.route('/clientEmployees', methods=['POST'])
 def add_clientEmployee():
@@ -97,6 +143,25 @@ def add_clientEmployee():
 
     # return created obj
     new_clientEmployee = ClientEmployeeSchema().dump(clientEmployee).data
+    session.close()
+    return jsonify(new_clientEmployee), 201
+
+@app.route('/clientEmployees/<id>', methods=['POST'])
+def update_clientEmployee(id):
+    # fetching from the database
+    session = Session()
+    clientEmployee_object = session.query(ClientEmployee).get(id)
+
+    clientEmployee_object.firstName = request.get_json().get('firstName'),
+    clientEmployee_object.lastName = request.get_json().get('lastName'),
+    clientEmployee_object.email = request.get_json().get('email'),
+    clientEmployee_object.tel = request.get_json().get('tel'),
+    clientEmployee_object.title = request.get_json().get('title'),
+
+    session.commit()
+
+    # return created obj
+    new_clientEmployee = ClientSchema().dump(clientEmployee_object).data
     session.close()
     return jsonify(new_clientEmployee), 201
 

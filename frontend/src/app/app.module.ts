@@ -54,7 +54,7 @@ const appRoutes: Routes = [
   { path: 'new-consultant', component: ConsultantAddFormComponent },
   { path: 'clients', component: ClientsComponent },
   { path: 'new-client', component: ClientAddFormComponent },
-  { path: 'edit-client', component: ClientEditFormComponent },
+  { path: 'edit-client/:id', component: ClientEditFormComponent },
   { path: 'new-clientEmployee/:id', component: ClientEmployeeAddFormComponent },
   { path: 'managers', component: ManagersComponent },
   { path: 'new-manager', component: ManagerAddFormComponent },

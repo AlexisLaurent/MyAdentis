@@ -1,12 +1,10 @@
 export class Manager {
-  constructor(
-    public firstName: string,
-    public lastName: string,
-    public email: string,
-    public tel: string,
-    public _id?: number,
-    public updatedAt?: Date,
-    public createdAt?: Date,
-    public lastUpdatedBy?: string,
-  ) { }
+    firstName: string;
+    lastName: string;
+    email: string;
+    tel: string;
+    id?: number;
+    updatedAt?: Date;
+    createdAt?: Date;
+    lastUpdatedBy?: string;
 }

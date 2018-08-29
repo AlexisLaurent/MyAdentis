@@ -38,4 +38,9 @@ export class ClientsApiService {
     return this.http
       .post(this.API_URL + "/clients", client);
   }
+
+  updateClient(client: Client): Observable<any> {
+    return this.http
+      .post(this.API_URL + "/clients/" + client.id, client);
+  }
 }
