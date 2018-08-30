@@ -73,10 +73,18 @@ export class ClientEditFormComponent implements OnInit {
       );
   }
 
-  displayedColumns: string[] = ['firstName','lastName','email','tel', 'title', 'edit'];
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  addClientEmployee() {
+    this.router.navigate(['/new-clientEmployee/'+this.client.id]);
   }
+
+  deleteClientEmployee(id) {
+    this.clientEmployeesApi
+      .deleteClientEmployee(id)
+      .subscribe(
+        err => console.log(err)
+      );
+  }
+
+  displayedColumns: string[] = ['firstName','lastName','email','tel', 'title', 'edit', 'delete'];
 
 }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {ClientEmployee} from './clientEmployee.model';
 
 @Injectable()
@@ -50,5 +50,10 @@ export class ClientEmployeesApiService {
   updateClientEmployee(clientEmployee: ClientEmployee): Observable<any> {
     return this.http
       .post(this.API_URL + "/clientEmployees/" + clientEmployee.id, clientEmployee);
+  }
+
+  deleteClientEmployee(id: Number): Observable<any> {
+    return this.http
+      .delete(this.API_URL + "/clientEmployee/delete/" + id)
   }
 }

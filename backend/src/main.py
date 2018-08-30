@@ -165,6 +165,17 @@ def update_clientEmployee(id):
     session.close()
     return jsonify(new_clientEmployee), 201
 
+@app.route('/clientEmployee/delete/<id>', methods=['DELETE'])
+def delete_clientEmployee(id):
+    # fetching from the database
+    session = Session()
+    clientEmployee_object = session.query(ClientEmployee).get(id)
+
+    session.delete(clientEmployee_object)
+    session.commit()
+    session.close()
+    return '201'
+
 # CONSULTANT
 @app.route('/consultants')
 def get_consultants():

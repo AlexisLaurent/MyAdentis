@@ -22,7 +22,7 @@ export class ClientEmployeeEditFormComponent implements OnInit {
 
   ngOnInit() {
 
-    let clientEmployeeId = parseInt(localStorage.getItem("editClientEmployeeId"));
+    let clientEmployeeId = parseInt(this.activatedRoute.snapshot.params["id"]);
 
     this.clientEmployeeForm = this.formBuilder.group({
       firstName: ['', Validators.required],
@@ -58,7 +58,7 @@ export class ClientEmployeeEditFormComponent implements OnInit {
     this.clientEmployeesApi
       .updateClientEmployee(this.clientEmployee)
       .subscribe(
-        () => this.router.navigate(['/clients']),
+        () => this.router.navigate(['/edit-client/'+this.clientEmployee.client_id]),
         error => alert(error.message)
       );
   }

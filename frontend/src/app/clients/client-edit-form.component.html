@@ -33,9 +33,7 @@
       </tr>
       <tr>  
         <td>    
-          <mat-form-field>
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-          </mat-form-field>
+          <button mat-raised-button color="primary" class="add-clientEmployee" (click)="addClientEmployee()">Ajouter un employé</button>
 
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
@@ -69,6 +67,15 @@
               <td mat-cell *matCellDef="let element"> 
                 <button mat-fab color="primary" class="edit-client" routerLink="/edit-clientEmployee/{{element.id}}" >
                   <i class="material-icons">edit</i>
+                </button> 
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete">
+              <th mat-header-cell *matHeaderCellDef> Supprimer </th>
+              <td mat-cell *matCellDef="let element"> 
+                <button mat-fab color="primary" class="delete-client" (click)="deleteClientEmployee(element.id)">
+                  <i class="material-icons">delete</i>
                 </button> 
               </td>
             </ng-container>

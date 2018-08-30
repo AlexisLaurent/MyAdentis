@@ -12,15 +12,13 @@ import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
 })
 export class ClientEmployeeAddFormComponent {
 
-  client_id: number;
-
   clientEmployee = {
     firstName: '',
     lastName: '',
     email: '',
     tel: '',
     title: '',
-    client_id: this.client_id,
+    client_id: '',
   };
 
   clientEmployeeForm: FormGroup;
@@ -28,7 +26,7 @@ export class ClientEmployeeAddFormComponent {
   constructor(private clientEmployeesApi: ClientEmployeesApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.clientEmployee.client_id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
+    this.clientEmployee.client_id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.clientEmployeeForm = this.formBuilder.group({
       'firstName': [this.clientEmployee.firstName, [Validators.required]],
@@ -43,7 +41,7 @@ export class ClientEmployeeAddFormComponent {
     this.clientEmployeesApi
       .saveClientEmployee(this.clientEmployee)
       .subscribe(
-        () => this.router.navigate(['/clients']),
+        () => this.router.navigate(['/edit-client/'+ this.clientEmployee.client_id]),
         error => alert(error.message)
       );
   }

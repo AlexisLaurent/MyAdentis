@@ -21,6 +21,7 @@ import {ClientAddFormComponent} from './clients/client-add-form.component';
 import {ClientEditFormComponent} from './clients/client-edit-form.component';
 
 import {ClientEmployeeAddFormComponent} from './clientEmployees/clientEmployee-add-form.component';
+import {ClientEmployeeEditFormComponent} from './clientEmployees/clientEmployee-edit-form.component';
 
 import {ManagersComponent} from './managers/managers.component';
 import {ManagerAddFormComponent} from './managers/manager-add-form.component';
@@ -56,6 +57,7 @@ const appRoutes: Routes = [
   { path: 'new-client', component: ClientAddFormComponent },
   { path: 'edit-client/:id', component: ClientEditFormComponent },
   { path: 'new-clientEmployee/:id', component: ClientEmployeeAddFormComponent },
+  { path: 'edit-clientEmployee/:id', component: ClientEmployeeEditFormComponent },
   { path: 'managers', component: ManagersComponent },
   { path: 'new-manager', component: ManagerAddFormComponent },
   { path: 'projects', component: ProjectsComponent },
@@ -74,6 +76,7 @@ const appRoutes: Routes = [
     ClientAddFormComponent,
     ClientEditFormComponent,
     ClientEmployeeAddFormComponent,
+    ClientEmployeeEditFormComponent,
     ManagersComponent,
     ManagerAddFormComponent,
     ProjectsComponent,
