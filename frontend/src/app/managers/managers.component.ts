@@ -32,7 +32,7 @@ export class ManagersComponent {
     this.managersListSubs.unsubscribe();
   }
 
-  displayedColumns: string[] = ['firstName','lastName','email','tel'];
+  displayedColumns: string[] = ['firstName','lastName','email','tel','edit'];
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();

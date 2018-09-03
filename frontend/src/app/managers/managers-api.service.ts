@@ -25,8 +25,22 @@ export class ManagersApiService {
       );
   }
 
+  // GET Client
+  getManager(id: Number): Observable<Manager> {
+    return this.http
+      .get<Manager>(this.API_URL + "/managers/" + id)
+      .pipe(
+        catchError(ManagersApiService._handleError)
+      );
+  }
+
   saveManager(manager: Manager): Observable<any> {
     return this.http
       .post(this.API_URL + "/managers", manager);
+  }
+
+  updateManager(manager: Manager): Observable<any> {
+    return this.http
+      .post(this.API_URL + "/managers/" + manager.id, manager);
   }
 }

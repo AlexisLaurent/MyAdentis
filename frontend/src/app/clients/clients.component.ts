@@ -34,9 +34,17 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.clientsListSubs.unsubscribe();
   }
 
-  displayedColumns: string[] = ['name','address','cp','city', 'edit'];
+  displayedColumns: string[] = ['name','address','cp','city', 'edit','delete'];
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  deleteClient(id) {
+    this.clientsApi
+      .deleteClient(id)
+      .subscribe(
+        err => console.log(err)
+      );
   }
 }

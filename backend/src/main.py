@@ -85,6 +85,17 @@ def update_client(id):
     session.close()
     return jsonify(new_client), 201
 
+@app.route('/client/delete/<id>', methods=['DELETE'])
+def delete_client(id):
+    # fetching from the database
+    session = Session()
+    client_object = session.query(Client).get(id)
+
+    session.delete(client_object)
+    session.commit()
+    session.close()
+    return '201'
+
 # CLIENT EMPLOYEE
 @app.route('/clientEmployees')
 def get_clientEmployees():
@@ -191,7 +202,7 @@ def get_consultants():
     session.close()
     return jsonify(consultants.data)
 
-@app.route('/consultants/<id>')
+@app.route('/consultant/<id>')
 def consultant(id):
     # fetching from the database
     session = Session()
@@ -204,6 +215,20 @@ def consultant(id):
     # serializing as JSON
     session.close()
     return jsonify(consultant)
+
+@app.route('/consultants/<manager_id>')
+def get_consultantsForClient(manager_id):
+    # fetching from the database
+    session = Session()
+    consultant_objects = session.query(Consultant).filter_by(manager_id=manager_id).all()
+
+    # transforming into JSON-serializable objects
+    schema = ConsultantSchema(many=True)
+    consultants = schema.dump(consultant_objects)
+
+    # serializing as JSON
+    session.close()
+    return jsonify(consultants.data)
 
 @app.route('/consultants', methods=['POST'])
 def add_consultant():
@@ -222,6 +247,36 @@ def add_consultant():
     new_consultant = ConsultantSchema().dump(consultant).data
     session.close()
     return jsonify(new_consultant), 201
+
+@app.route('/consultants/<id>', methods=['POST'])
+def update_consultant(id):
+    # fetching from the database
+    session = Session()
+    consultant_object = session.query(Consultant).get(id)
+
+    consultant_object.firstName = request.get_json().get('firstName'),
+    consultant_object.lastName = request.get_json().get('lastName'),
+    consultant_object.email = request.get_json().get('email'),
+    consultant_object.tel = request.get_json().get('tel'),
+    consultant_object.title = request.get_json().get('title'),
+
+    session.commit()
+
+    # return created obj
+    new_consultant = ConsultantSchema().dump(consultant_object).data
+    session.close()
+    return jsonify(new_consultant), 201
+
+@app.route('/consultant/delete/<id>', methods=['DELETE'])
+def delete_consultant(id):
+    # fetching from the database
+    session = Session()
+    consultant_object = session.query(Consultant).get(id)
+
+    session.delete(consultant_object)
+    session.commit()
+    session.close()
+    return '201'
 
 # MANAGER
 @app.route('/managers')
@@ -253,6 +308,38 @@ def add_manager():
 
     # return created obj
     new_manager = ManagerSchema().dump(manager).data
+    session.close()
+    return jsonify(new_manager), 201
+
+@app.route('/managers/<id>')
+def get_manager(id):
+    # fetching from the database
+    session = Session()
+    manager_object = session.query(Manager).get(id)
+
+    # transforming into JSON-serializable objects
+    schema = ManagerSchema()
+    manager = schema.dump(manager_object)
+
+    # serializing as JSON
+    session.close()
+    return jsonify(manager)
+
+@app.route('/managers/<id>', methods=['POST'])
+def update_manager(id):
+    # fetching from the database
+    session = Session()
+    manager_object = session.query(Manager).get(id)
+
+    manager_object.name = request.get_json().get('name'),
+    manager_object.address = request.get_json().get('address'),
+    manager_object.cp = request.get_json().get('cp'),
+    manager_object.city = request.get_json().get('city'),
+
+    session.commit()
+
+    # return created obj
+    new_manager = ManagerSchema().dump(manager_object).data
     session.close()
     return jsonify(new_manager), 201
 

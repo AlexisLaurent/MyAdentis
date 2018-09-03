@@ -1,0 +1,86 @@
+<div>
+  <h2>Editer Manager</h2>
+
+  <form [formGroup]="managerForm" (ngSubmit)="managerForm.valid && updateManager()">
+    <table>    
+      <tr>    
+        <td>
+          <mat-form-field>
+            <input matInput id="firstName" formControlName="firstName"  placeholder="Prénom">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="lastName" formControlName="lastName"  placeholder="Nom">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="email" formControlName="email"  placeholder="Email">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <mat-form-field>
+            <input matInput id="tel" formControlName="tel" placeholder="Téléphone">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>  
+        <td>    
+          <button mat-raised-button color="primary" class="add-consultant" (click)="addConsultant()">Ajouter un consultant</button>
+
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="firstName">
+              <th mat-header-cell *matHeaderCellDef> Prénom </th>
+              <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastName">
+              <th mat-header-cell *matHeaderCellDef> Nom </th>
+              <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef> Email </th>
+              <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tel">
+              <th mat-header-cell *matHeaderCellDef> Téléphone </th>
+              <td mat-cell *matCellDef="let element"> {{element.tel}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="edit">
+              <th mat-header-cell *matHeaderCellDef> Editer </th>
+              <td mat-cell *matCellDef="let element"> 
+                <button mat-fab color="primary" class="edit-consultant" routerLink="/edit-consultant/{{element.id}}" >
+                  <i class="material-icons">edit</i>
+                </button> 
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete">
+              <th mat-header-cell *matHeaderCellDef> Supprimer </th>
+              <td mat-cell *matCellDef="let element"> 
+                <button mat-fab color="primary" class="delete-consultant" (click)="deleteConsultant(element.id)">
+                  <i class="material-icons">delete</i>
+                </button> 
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <button mat-raised-button type="submit" color="primary">Sauvegarder</button>
+  </form>
+</div>

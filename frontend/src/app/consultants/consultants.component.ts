@@ -32,9 +32,17 @@ export class ConsultantsComponent {
     this.consultantsListSubs.unsubscribe();
   }
 
-  displayedColumns: string[] = ['firstName','lastName','email','tel'];
+  displayedColumns: string[] = ['firstName','lastName','email','tel','edit','delete'];
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  deleteConsultant(id) {
+    this.consultantsApi
+      .deleteConsultant(id)
+      .subscribe(
+        err => console.log(err)
+      );
   }
 }

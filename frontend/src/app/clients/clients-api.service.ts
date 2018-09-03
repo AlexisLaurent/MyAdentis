@@ -43,4 +43,9 @@ export class ClientsApiService {
     return this.http
       .post(this.API_URL + "/clients/" + client.id, client);
   }
+
+  deleteClient(id: Number): Observable<any> {
+    return this.http
+      .delete(this.API_URL + "/client/delete/" + id)
+  }
 }

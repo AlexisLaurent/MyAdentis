@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router, ActivatedRoute, Params} from "@angular/router";
-import {ClientEmployee} from './ClientEmployee.model';
+import {ClientEmployee} from './clientEmployee.model';
 import {ClientEmployeesApiService} from './clientEmployees-api.service';
 import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
 
@@ -12,21 +12,13 @@ import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
 })
 export class ClientEmployeeAddFormComponent {
 
-  clientEmployee = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    tel: '',
-    title: '',
-    client_id: '',
-  };
-
+  clientEmployee: ClientEmployee;
   clientEmployeeForm: FormGroup;
 
   constructor(private clientEmployeesApi: ClientEmployeesApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.clientEmployee.client_id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.clientEmployee.client_id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
 
     this.clientEmployeeForm = this.formBuilder.group({
       'firstName': [this.clientEmployee.firstName, [Validators.required]],

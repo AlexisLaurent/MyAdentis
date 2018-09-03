@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Router} from "@angular/router";
+import {Router, ActivatedRoute, Params} from "@angular/router";
 import {Consultant} from './consultant.model';
 import {ConsultantsApiService} from './consultants-api.service';
 import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
@@ -11,19 +11,15 @@ import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
   styleUrls: ['consultants.component.css']
 })
 export class ConsultantAddFormComponent {
-  consultant = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    tel: '',
-    manager_id: 1
-  };
-
+  
+  consultant = new Consultant();
   consultantForm: FormGroup;
 
-  constructor(private consultantsApi: ConsultantsApiService, private formBuilder: FormBuilder, private router: Router) { }
+  constructor(private consultantsApi: ConsultantsApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    this.consultant.manager_id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
+
     this.consultantForm = this.formBuilder.group({
       'firstName': [this.consultant.firstName, [Validators.required]],
       'lastName': [this.consultant.lastName, [Validators.required]],

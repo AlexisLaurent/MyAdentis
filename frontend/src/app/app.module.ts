@@ -25,9 +25,11 @@ import {ClientEmployeeEditFormComponent} from './clientEmployees/clientEmployee-
 
 import {ManagersComponent} from './managers/managers.component';
 import {ManagerAddFormComponent} from './managers/manager-add-form.component';
+import {ManagerEditFormComponent} from './managers/manager-edit-form.component';
 
 import {ConsultantsComponent} from './consultants/consultants.component';
 import {ConsultantAddFormComponent} from './consultants/consultant-add-form.component';
+import {ConsultantEditFormComponent} from './consultants/consultant-edit-form.component';
 
 import {ProjectsComponent} from './projects/projects.component';
 import {ProjectAddFormComponent} from './projects/project-add-form.component';
@@ -52,7 +54,8 @@ const appRoutes: Routes = [
   { path: 'new-meeting', component: MeetingAddFormComponent },
   { path: 'edit-meeting', component: MeetingEditFormComponent },
   { path: 'consultants', component: ConsultantsComponent },
-  { path: 'new-consultant', component: ConsultantAddFormComponent },
+  { path: 'new-consultant/:id', component: ConsultantAddFormComponent },
+  { path: 'edit-consultant/:id', component: ConsultantEditFormComponent },
   { path: 'clients', component: ClientsComponent },
   { path: 'new-client', component: ClientAddFormComponent },
   { path: 'edit-client/:id', component: ClientEditFormComponent },
@@ -60,6 +63,7 @@ const appRoutes: Routes = [
   { path: 'edit-clientEmployee/:id', component: ClientEmployeeEditFormComponent },
   { path: 'managers', component: ManagersComponent },
   { path: 'new-manager', component: ManagerAddFormComponent },
+  { path: 'edit-manager/:id', component: ManagerEditFormComponent },
   { path: 'projects', component: ProjectsComponent },
   { path: 'new-project', component: ProjectAddFormComponent },
 ];
@@ -72,6 +76,7 @@ const appRoutes: Routes = [
     MeetingEditFormComponent,
     ConsultantsComponent,
     ConsultantAddFormComponent,
+    ConsultantEditFormComponent,
     ClientsComponent,
     ClientAddFormComponent,
     ClientEditFormComponent,
@@ -79,6 +84,7 @@ const appRoutes: Routes = [
     ClientEmployeeEditFormComponent,
     ManagersComponent,
     ManagerAddFormComponent,
+    ManagerEditFormComponent,
     ProjectsComponent,
     ProjectAddFormComponent,
   ],
