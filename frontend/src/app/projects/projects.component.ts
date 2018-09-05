@@ -29,11 +29,10 @@ export class ProjectsComponent {
   ngOnInit() {
     /*this.projectsListSubs = this.projectsApi
       .getProjects()
-      .flatMap(params => {
+      .tap(params => {
           params.forEach(elem => {
-          this.project.start_date = elem.start_date;
-          this.project.end_date = elem.end_date;
-          return  [this.consultantsApi.getConsultant(elem.consultant_id),this.clientsApi.getClient(elem.client_id)]
+            this.project.start_date = elem.start_date;
+            this.project.end_date = elem.end_date;
         }
         this.dataSource = new MatTableDataSource(this.dataList);
       })
@@ -48,10 +47,18 @@ export class ProjectsComponent {
     //this.projectsListSubs.unsubscribe();
   }
 
-  displayedColumns: string[] = ['consultant','client','start_date','end_date'];
+  displayedColumns: string[] = ['consultant','client','start_date','end_date','edit','delete'];
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  deleteProject(id) {
+    this.projectsApi
+      .deleteProject(id)
+      .subscribe(
+        err => console.log(err)
+      );
   }
 }
 

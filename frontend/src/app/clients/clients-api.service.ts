@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
+import {throwError} from 'rxjs';
 import {Client} from './client.model';
 
 @Injectable()
@@ -12,8 +14,8 @@ export class ClientsApiService {
   constructor(private http: HttpClient) {
   }
 
-  private static _handleError(err: HttpErrorResponse | any) {
-    return Observable.throw(err.message || 'Error: Unable to complete request.');
+  private handleError(err: HttpErrorResponse | any) {
+    return throwError(err.message || 'Error: Unable to complete request.');
   }
 
   // GET list of public, future events
@@ -21,7 +23,7 @@ export class ClientsApiService {
     return this.http
       .get<Client[]>(this.API_URL + "/clients")
       .pipe(
-        catchError(ClientsApiService._handleError)
+        catchError(this.handleError)
       );
   }
 
@@ -30,22 +32,31 @@ export class ClientsApiService {
     return this.http
       .get<Client>(this.API_URL + "/clients/" + id)
       .pipe(
-        catchError(ClientsApiService._handleError)
+        catchError(this.handleError)
       );
   }
 
   saveClient(client: Client): Observable<any> {
     return this.http
-      .post(this.API_URL + "/clients", client);
+      .post(this.API_URL + "/clients", client)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   updateClient(client: Client): Observable<any> {
     return this.http
-      .post(this.API_URL + "/clients/" + client.id, client);
+      .put(this.API_URL + "/clients/" + client.id, client)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   deleteClient(id: Number): Observable<any> {
     return this.http
-      .delete(this.API_URL + "/client/delete/" + id)
+      .delete(this.API_URL + "/clients/" + id)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 }

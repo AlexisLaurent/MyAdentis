@@ -32,9 +32,17 @@ export class ManagersComponent {
     this.managersListSubs.unsubscribe();
   }
 
-  displayedColumns: string[] = ['firstName','lastName','email','tel','edit'];
+  displayedColumns: string[] = ['firstName','lastName','email','tel','edit', 'delete'];
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  deleteManager(id) {
+    this.managersApi
+      .deleteManager(id)
+      .subscribe(
+        err => console.log(err)
+      );
   }
 }

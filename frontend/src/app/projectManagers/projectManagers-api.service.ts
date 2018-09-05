@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
+import {throwError} from 'rxjs';
 import {ProjectManager} from './projectManager.model';
 
 @Injectable()
@@ -12,8 +14,8 @@ export class ProjectManagersApiService {
   constructor(private http: HttpClient) {
   }
 
-  private static _handleError(err: HttpErrorResponse | any) {
-    return Observable.throw(err.message || 'Error: Unable to complete request.');
+  private handleError(err: HttpErrorResponse | any) {
+    return throwError(err.message || 'Error: Unable to complete request.');
   }
 
   // GET list of public, future events
@@ -21,12 +23,39 @@ export class ProjectManagersApiService {
     return this.http
       .get<ProjectManager[]>(this.API_URL + "/projectManagers")
       .pipe(
-        catchError(ProjectManagersApiService._handleError)
+        catchError(this.handleError)
+      );
+  }
+
+  getProjectManager(id: Number): Observable<ProjectManager> {
+    return this.http
+      .get<ProjectManager>(this.API_URL + "/projectManagers/" + id)
+      .pipe(
+        catchError(this.handleError)
       );
   }
 
   saveProjectManager(projectManager: ProjectManager): Observable<any> {
     return this.http
-      .post(this.API_URL + "/projectManagers", projectManager);
+      .post(this.API_URL + "/projectManagers", projectManager)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  updateProjectManager(projectManager: ProjectManager): Observable<any> {
+    return this.http
+      .put(this.API_URL + "/projectManagers/" + projectManager.id, projectManager)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  deleteProjectManager(id: Number): Observable<any> {
+    return this.http
+      .delete(this.API_URL + "/projectManager/" + id)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 }
