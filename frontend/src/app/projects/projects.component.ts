@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {Subscription} from 'rxjs';
-//import {mergeMap} from 'rxjs/add/operator';
+import {concatMap, tap} from 'rxjs/operators';
 import {Project} from './project.model';
 import {ProjectsApiService} from './projects-api.service';
 import {Consultant} from '../consultants/consultant.model';
@@ -18,33 +18,26 @@ import {ClientsApiService} from '../clients/clients-api.service';
 export class ProjectsComponent {
   projectsListSubs: Subscription;
   projectsList: Project[];
-  dataSource: MatTableDataSource<Test>;
-  dataList: Test[];
-  consultantSubs: Subscription;
-  clientSubs: Subscription;
-  project : Test;
+
+  project = new DetailedProject();
+  dataList = new Array<DetailedProject>();
+  dataSource: MatTableDataSource<DetailedProject>;
 
   constructor(private projectsApi: ProjectsApiService, private consultantsApi: ConsultantsApiService, private clientsApi: ClientsApiService) { }
 
   ngOnInit() {
-    /*this.projectsListSubs = this.projectsApi
-      .getProjects()
-      .tap(params => {
-          params.forEach(elem => {
-            this.project.start_date = elem.start_date;
-            this.project.end_date = elem.end_date;
-        }
-        this.dataSource = new MatTableDataSource(this.dataList);
-      })
-      .subscribe(params => {
-        this.project.consultant = params[0].firstName + " " + params[0].lastName;
-        this.project.client = params[1].name;
-        this.dataList.push(this.project);
-      });*/
+    this.projectsListSubs = this.projectsApi
+      .getDetailedProjects()
+      .subscribe(res => {
+          this.projectsList = res;
+          this.dataSource = new MatTableDataSource(res);
+        },
+        console.error
+      );
   }
 
   ngOnDestroy() {
-    //this.projectsListSubs.unsubscribe();
+    this.projectsListSubs.unsubscribe();
   }
 
   displayedColumns: string[] = ['consultant','client','start_date','end_date','edit','delete'];
@@ -62,10 +55,11 @@ export class ProjectsComponent {
   }
 }
 
-
-export interface Test {
-  consultant: String,
-  client: String,
-  start_date: Date,
-  end_date: Date,
+export class DetailedProject {
+  id: number;
+  manager: string;
+  consultant: string;
+  client: string;
+  start_date: Date;
+  end_date: Date;
 }

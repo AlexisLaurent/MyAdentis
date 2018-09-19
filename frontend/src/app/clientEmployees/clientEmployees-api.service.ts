@@ -30,7 +30,7 @@ export class ClientEmployeesApiService {
   // GET list of public, future events
   getClientEmployeesForClient(client_id: Number): Observable<ClientEmployee[]> {
     return this.http
-      .get<ClientEmployee[]>(this.API_URL + "/clientEmployees/" + client_id)
+      .get<ClientEmployee[]>(this.API_URL + "/clientEmployees?client_id=" + client_id)
       .pipe(
         catchError(this.handleError)
       );
@@ -38,7 +38,7 @@ export class ClientEmployeesApiService {
 
   getClientEmployee(id: Number): Observable<ClientEmployee> {
     return this.http
-      .get<ClientEmployee>(this.API_URL + "/clientEmployee/" + id)
+      .get<ClientEmployee>(this.API_URL + "/clientEmployees/" + id)
       .pipe(
         catchError(this.handleError)
       );
@@ -62,7 +62,7 @@ export class ClientEmployeesApiService {
 
   deleteClientEmployee(id: Number): Observable<any> {
     return this.http
-      .delete(this.API_URL + "/clientEmployee/delete/" + id)
+      .delete(this.API_URL + "/clientEmployees/" + id)
       .pipe(
         catchError(this.handleError)
       );

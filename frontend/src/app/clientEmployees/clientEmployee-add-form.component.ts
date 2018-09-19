@@ -12,7 +12,7 @@ import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
 })
 export class ClientEmployeeAddFormComponent {
 
-  clientEmployee: ClientEmployee;
+  clientEmployee = new ClientEmployee();
   clientEmployeeForm: FormGroup;
 
   constructor(private clientEmployeesApi: ClientEmployeesApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) { }

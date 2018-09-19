@@ -33,6 +33,7 @@ import {ConsultantEditFormComponent} from './consultants/consultant-edit-form.co
 
 import {ProjectsComponent} from './projects/projects.component';
 import {ProjectAddFormComponent} from './projects/project-add-form.component';
+import {ProjectEditFormComponent} from './projects/project-edit-form.component';
 
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatToolbarModule, MatButtonModule, MatCardModule} from '@angular/material';
@@ -66,6 +67,7 @@ const appRoutes: Routes = [
   { path: 'edit-manager/:id', component: ManagerEditFormComponent },
   { path: 'projects', component: ProjectsComponent },
   { path: 'new-project', component: ProjectAddFormComponent },
+  { path: 'edit-project/:id', component: ProjectEditFormComponent },
 ];
 
 @NgModule({
@@ -87,6 +89,7 @@ const appRoutes: Routes = [
     ManagerEditFormComponent,
     ProjectsComponent,
     ProjectAddFormComponent,
+    ProjectEditFormComponent,
   ],
   imports: [
     BrowserModule,

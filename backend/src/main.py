@@ -100,7 +100,11 @@ def delete_client(id):
 def get_clientEmployees():
     # fetching from the database
     session = Session()
-    clientEmployee_objects = session.query(ClientEmployee).all()
+
+    if request.args.get('client_id') :
+        clientEmployee_objects = session.query(ClientEmployee).filter_by(client_id=request.args.get('client_id'))
+    else :
+        clientEmployee_objects = session.query(ClientEmployee).all()
 
     # transforming into JSON-serializable objects
     schema = ClientEmployeeSchema(many=True)
@@ -110,21 +114,7 @@ def get_clientEmployees():
     session.close()
     return jsonify(clientEmployees.data)
 
-@app.route('/clientEmployees/<client_id>')
-def get_clientEmployeesForClient(client_id):
-    # fetching from the database
-    session = Session()
-    clientEmployee_objects = session.query(ClientEmployee).filter_by(client_id=client_id).all()
-
-    # transforming into JSON-serializable objects
-    schema = ClientEmployeeSchema(many=True)
-    clientEmployees = schema.dump(clientEmployee_objects)
-
-    # serializing as JSON
-    session.close()
-    return jsonify(clientEmployees.data)
-
-@app.route('/clientEmployee/<id>')
+@app.route('/clientEmployees/<id>')
 def get_clientEmployee(id):
     # fetching from the database
     session = Session()
@@ -191,7 +181,11 @@ def delete_clientEmployee(id):
 def get_consultants():
     # fetching from the database
     session = Session()
-    consultant_objects = session.query(Consultant).all()
+
+    if request.args.get('manager_id') :
+        consultant_objects = session.query(Consultant).filter_by(manager_id=request.args.get('manager_id'))
+    else :
+        consultant_objects = session.query(Consultant).all()
 
     # transforming into JSON-serializable objects
     schema = ConsultantSchema(many=True)
@@ -201,21 +195,7 @@ def get_consultants():
     session.close()
     return jsonify(consultants.data)
 
-@app.route('/consultants/<manager_id>')
-def get_consultantsForClient(manager_id):
-    # fetching from the database
-    session = Session()
-    consultant_objects = session.query(Consultant).filter_by(manager_id=manager_id).all()
-
-    # transforming into JSON-serializable objects
-    schema = ConsultantSchema(many=True)
-    consultants = schema.dump(consultant_objects)
-
-    # serializing as JSON
-    session.close()
-    return jsonify(consultants.data)
-
-@app.route('/consultant/<id>')
+@app.route('/consultants/<id>')
 def get_consultant(id):
     # fetching from the database
     session = Session()
@@ -452,6 +432,29 @@ def get_projects():
     # serializing as JSON
     session.close()
     return jsonify(project.data)
+
+@app.route('/detailedProjects')
+def get_detailedProjects():
+    # fetching from the database
+    session = Session()
+    project_objects = session.query(Project).all()
+
+    detailedProjects = []
+
+    for project in project_objects :
+        detailedProject = {}
+        detailedProject["id"] = project.id;
+        c = session.query(Consultant).get(project.consultant_id)
+        detailedProject["consultant"] = c.lastName + " " + c.firstName
+        detailedProject["manager"] = session.query(Manager).get(project.manager_id).lastName
+        detailedProject["client"] = session.query(Client).get(project.client_id).name
+        detailedProject["start_date"] = project.start_date
+        detailedProject["end_date"] = project.end_date
+        detailedProjects.append(detailedProject)
+
+    # serializing as JSON
+    session.close()
+    return jsonify(detailedProjects)
 
 @app.route('/projects/<id>')
 def get_project(id):

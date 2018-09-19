@@ -54,7 +54,7 @@ export class ManagersApiService {
 
   deleteManager(id: Number): Observable<any> {
     return this.http
-      .delete(this.API_URL + "/manager/delete/" + id)
+      .delete(this.API_URL + "/managers/" + id)
       .pipe(
         catchError(this.handleError)
       );

@@ -53,7 +53,7 @@ export class ProjectManagersApiService {
 
   deleteProjectManager(id: Number): Observable<any> {
     return this.http
-      .delete(this.API_URL + "/projectManager/" + id)
+      .delete(this.API_URL + "/projectManagers/" + id)
       .pipe(
         catchError(this.handleError)
       );

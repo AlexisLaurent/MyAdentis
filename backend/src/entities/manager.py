@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from sqlalchemy import Column, String, Integer, DateTime
+from sqlalchemy.orm import relationship
 
 from .entity import Entity, Base
 
@@ -14,6 +15,7 @@ class Manager(Entity, Base):
     lastName = Column(String)
     email = Column(String)
     tel = Column(String)
+    consultant = relationship("Consultant", cascade="all,delete", backref="manager")
 
     def __init__(self, firstName, lastName, email, tel, created_by):
         Entity.__init__(self, created_by)

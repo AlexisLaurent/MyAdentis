@@ -30,7 +30,7 @@ export class ConsultantsApiService {
   // GET list of public, future events
   getConsultantsForManager(manager_id: Number): Observable<Consultant[]> {
     return this.http
-      .get<Consultant[]>(this.API_URL + "/consultants/" + manager_id)
+      .get<Consultant[]>(this.API_URL + "/consultants?manager_id=" + manager_id)
       .pipe(
         catchError(this.handleError)
       );
@@ -39,7 +39,7 @@ export class ConsultantsApiService {
    // GET Consultant
   getConsultant(id: Number): Observable<Consultant> {
     return this.http
-      .get<Consultant>(this.API_URL + "/consultant/" + id)
+      .get<Consultant>(this.API_URL + "/consultants/" + id)
       .pipe(
         catchError(this.handleError)
       );
@@ -63,7 +63,7 @@ export class ConsultantsApiService {
 
   deleteConsultant(id: Number): Observable<any> {
     return this.http
-      .delete(this.API_URL + "/consultant/delete/" + id)
+      .delete(this.API_URL + "/consultants/" + id)
       .pipe(
         catchError(this.handleError)
       );

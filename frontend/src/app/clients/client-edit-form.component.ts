@@ -50,7 +50,7 @@ export class ClientEditFormComponent implements OnInit {
             city: res[0].city,
           });
         }),
-        concatMap(res => this.clientEmployeesApi.getClientEmployeesForClient(this.client.id))
+        concatMap(res => this.clientEmployeesApi.getClientEmployeesForClient(clientId))
       )
       .subscribe(res => {
           this.dataSource = new MatTableDataSource(res);

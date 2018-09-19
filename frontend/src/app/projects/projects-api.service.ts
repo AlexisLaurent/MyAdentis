@@ -27,6 +27,15 @@ export class ProjectsApiService {
       );
   }
 
+  // GET list of public, future events
+  getDetailedProjects(): Observable<any[]> {
+    return this.http
+      .get<any[]>(this.API_URL + "/detailedProjects")
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   getProject(id: Number): Observable<Project> {
     return this.http
       .get<Project>(this.API_URL + "/projects/" + id)

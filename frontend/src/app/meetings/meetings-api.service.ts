@@ -52,7 +52,7 @@ export class MeetingsApiService {
       );
   }
 
-  deleteClient(id: Number): Observable<any> {
+  deleteMeeting(id: Number): Observable<any> {
     return this.http
       .delete(this.API_URL + "/meetings/" + id)
       .pipe(

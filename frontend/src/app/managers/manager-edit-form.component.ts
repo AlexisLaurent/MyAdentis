@@ -50,7 +50,7 @@ export class ManagerEditFormComponent implements OnInit {
             tel: res[0].tel,
           });
         }),
-        concatMap(res => this.consultantsApi.getConsultantsForManager(this.manager.id))
+        concatMap(res => this.consultantsApi.getConsultantsForManager(managerId))
       )
       .subscribe(res => {
           this.dataSource = new MatTableDataSource(res);

@@ -1,12 +1,12 @@
 <div>
-  <h2>Nouveau Projet</h2>
+  <h2>Editer Projet</h2>
 
-  <form [formGroup]="projectForm" (ngSubmit)="projectForm.valid && saveProject()">
+  <form [formGroup]="projectForm" (ngSubmit)="projectForm.valid && updateProject()">
     <table>    
       <tr>    
         <td>
           <mat-form-field>
-            <mat-select placeholder="Mes Consultants" [formControl]="consultantControl">
+            <mat-select placeholder="Mes Consultants" [formControl]="consultantControl" [(value)]="selectedConsultant">
               <mat-option *ngFor="let consultant of consultantsList" [value]="consultant">
                 {{consultant.lastName}} {{consultant.firstName}}
               </mat-option>
@@ -17,7 +17,7 @@
       <tr>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Id" formControlName="consultant_id" [(ngModel)]="project.consultant_id" value="{{consultantControl.value?.id}}" >
+            <input matInput placeholder="Id" formControlName="consultant_id" value="{{consultantControl.value?.id}}" >
           </mat-form-field>
         </td>
         <td>
@@ -44,7 +44,7 @@
       <tr>    
         <td>
           <mat-form-field>
-            <mat-select placeholder="Mes Clients" [formControl]="clientControl">
+            <mat-select placeholder="Mes Clients" [formControl]="clientControl" [(value)]="selectedClient">
               <mat-option *ngFor="let client of clientsList" [value]="client">
                 {{client.name}}, {{client.address}} - {{client.city}}
               </mat-option>
@@ -55,7 +55,7 @@
       <tr>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Id" formControlName="client_id" [(ngModel)]="project.client_id" value="{{clientControl.value?.id}}" >
+            <input matInput placeholder="Id" formControlName="client_id" value="{{clientControl.value?.id}}" >
           </mat-form-field>
         </td>
         <td>
@@ -82,7 +82,7 @@
       <tr>  
         <td>    
           <mat-form-field>
-            <input matInput [matDatepicker]="start_date" placeholder="Choisissez une date" formControlName="start_date" [(ngModel)]="project.start_date" [value]="date.value" >
+            <input matInput [matDatepicker]="start_date" placeholder="Choisissez une date" formControlName="start_date" >
             <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
             <mat-datepicker #start_date></mat-datepicker>
           </mat-form-field>
@@ -91,7 +91,7 @@
       <tr>  
         <td>    
           <mat-form-field>
-            <input matInput [matDatepicker]="end_date" placeholder="Choisissez une date" formControlName="end_date" [(ngModel)]="project.end_date" [value]="date.value" >
+            <input matInput [matDatepicker]="end_date" placeholder="Choisissez une date" formControlName="end_date" >
             <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
             <mat-datepicker #end_date></mat-datepicker>
           </mat-form-field>
