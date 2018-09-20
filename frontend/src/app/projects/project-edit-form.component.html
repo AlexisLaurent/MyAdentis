@@ -6,7 +6,7 @@
       <tr>    
         <td>
           <mat-form-field>
-            <mat-select placeholder="Mes Consultants" [formControl]="consultantControl" [(value)]="selectedConsultant">
+            <mat-select placeholder="Mes Consultants" [formControl]="consultantControl" >
               <mat-option *ngFor="let consultant of consultantsList" [value]="consultant">
                 {{consultant.lastName}} {{consultant.firstName}}
               </mat-option>
@@ -14,37 +14,32 @@
           </mat-form-field>
         </td>
       </tr>
-      <tr>
+      <tr [formGroup]="consultantForm">
         <td>
           <mat-form-field>
-            <input matInput placeholder="Id" formControlName="consultant_id" value="{{consultantControl.value?.id}}" >
+            <input matInput placeholder="Nom" formControlName="lastName" value="{{consultantControl.value?.lastName}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Nom" value="{{consultantControl.value?.lastName}}" >
+            <input matInput placeholder="Prénom" formControlName="firstName" value="{{consultantControl.value?.firstName}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Prénom" value="{{consultantControl.value?.firstName}}" >
+            <input matInput placeholder="Email" formControlName="email" value="{{consultantControl.value?.email}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Email" value="{{consultantControl.value?.email}}" >
-          </mat-form-field>
-        </td>
-        <td>
-          <mat-form-field>
-            <input matInput placeholder="Téléphone" value="{{consultantControl.value?.tel}}" >
+            <input matInput placeholder="Téléphone" formControlName="tel" value="{{consultantControl.value?.tel}}" >
           </mat-form-field>
         </td>
       </tr>
       <tr>    
         <td>
           <mat-form-field>
-            <mat-select placeholder="Mes Clients" [formControl]="clientControl" [(value)]="selectedClient">
+            <mat-select placeholder="Mes Clients" [formControl]="clientControl" (selectionChange)="updateClientEmployeeList($event.value)">
               <mat-option *ngFor="let client of clientsList" [value]="client">
                 {{client.name}}, {{client.address}} - {{client.city}}
               </mat-option>
@@ -52,30 +47,63 @@
           </mat-form-field>
         </td>
       </tr>
-      <tr>
+      <tr [formGroup]="clientForm">
         <td>
           <mat-form-field>
-            <input matInput placeholder="Id" formControlName="client_id" value="{{clientControl.value?.id}}" >
+            <input matInput placeholder="Nom" formControlName="name" value="{{clientControl.value?.name}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Nom" value="{{clientControl.value?.name}}" >
+            <input matInput placeholder="Adresse" formControlName="address" value="{{clientControl.value?.address}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Adresse" value="{{clientControl.value?.address}}" >
+            <input matInput placeholder="Code Postal" formControlName="cp" value="{{clientControl.value?.cp}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Code Postal" value="{{clientControl.value?.cp}}" >
+            <input matInput placeholder="Ville" formControlName="city" value="{{clientControl.value?.city}}" >
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>    
+        <td>
+          <mat-form-field>
+            <mat-select placeholder="Responsable Projet" [formControl]="clientEmployeeControl">
+              <mat-option *ngFor="let clientEmployee of clientEmployeesList" [value]="clientEmployee">
+                {{clientEmployee.lastName}} {{clientEmployee.firstName}} - {{clientEmployee.title}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr [formGroup]="clientEmployeeForm">
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Nom" formControlName="lastName" value="{{clientEmployeeControl.value?.lastName}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Ville" value="{{clientControl.value?.city}}" >
+            <input matInput placeholder="Prénom" formControlName="firstName" value="{{clientEmployeeControl.value?.firstName}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Email" formControlName="email" value="{{clientEmployeeControl.value?.email}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Téléphone" formControlName="tel" value="{{clientEmployeeControl.value?.tel}}" >
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Poste" formControlName="title" value="{{clientEmployeeControl.value?.title}}" >
           </mat-form-field>
         </td>
       </tr>

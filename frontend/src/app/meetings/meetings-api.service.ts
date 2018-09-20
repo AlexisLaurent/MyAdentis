@@ -9,7 +9,7 @@ import {Meeting} from './meeting.model';
 @Injectable()
 export class MeetingsApiService {
 
-  API_URL = "http://localhost:5000/"
+  API_URL = "http://localhost:5000"
 
   constructor(private http: HttpClient) {
   }
@@ -31,6 +31,14 @@ export class MeetingsApiService {
   getMeeting(id: Number): Observable<Meeting> {
     return this.http
       .get<Meeting>(this.API_URL + "/meetings/" + id)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getSimplifiedMeetings(): Observable<any[]> {
+    return this.http
+      .get<any[]>(this.API_URL + "/simplifiedMeetings")
       .pipe(
         catchError(this.handleError)
       );

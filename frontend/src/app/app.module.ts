@@ -9,7 +9,6 @@ import {ClientsApiService} from './clients/clients-api.service';
 import {ConsultantsApiService} from './consultants/consultants-api.service';
 import {ManagersApiService} from './managers/managers-api.service';
 import {MeetingsApiService} from './meetings/meetings-api.service';
-import {ProjectManagersApiService} from './projectManagers/projectManagers-api.service';
 import {ProjectsApiService} from './projects/projects-api.service';
 
 import {MeetingsComponent} from './meetings/meetings.component';
@@ -48,6 +47,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatListModule} from '@angular/material/list';
 import {AmazingTimePickerModule} from 'amazing-time-picker';
 import {SignaturePadModule} from 'angular2-signaturepad';
+import {MatRadioModule} from '@angular/material/radio';
 
 const appRoutes: Routes = [
   { path: '', component: MeetingsComponent },
@@ -118,10 +118,11 @@ const appRoutes: Routes = [
     MatListModule,
     AmazingTimePickerModule,
     SignaturePadModule,
+    MatRadioModule,
   ],
   providers: [ClientEmployeesApiService, ClientsApiService,
               ConsultantsApiService, ManagersApiService, MeetingsApiService,
-              MeetingsApiService, ProjectManagersApiService, ProjectsApiService],
+              MeetingsApiService, ProjectsApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

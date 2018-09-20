@@ -8,6 +8,8 @@ import {Consultant} from '../consultants/consultant.model';
 import {ConsultantsApiService} from '../consultants/consultants-api.service';
 import {Client} from '../clients/client.model';
 import {ClientsApiService} from '../clients/clients-api.service';
+import {ClientEmployee} from '../clientEmployees/clientEmployee.model';
+import {ClientEmployeesApiService} from '../clientEmployees/clientEmployees-api.service';
 import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
 
 @Component({
@@ -28,9 +30,13 @@ export class ProjectAddFormComponent {
   clientsList: Client[];
   clientControl = new FormControl('');
 
+  clientEmployeesListSubs: Subscription;
+  clientEmployeesList: ClientEmployee[];
+  clientEmployeeControl = new FormControl('');
+
   date = new FormControl(new Date());
 
-  constructor(private projectsApi: ProjectsApiService, private consultantsApi: ConsultantsApiService, private clientsApi: ClientsApiService, private formBuilder: FormBuilder, private router: Router) { }
+  constructor(private projectsApi: ProjectsApiService, private consultantsApi: ConsultantsApiService, private clientsApi: ClientsApiService, private clientEmployeesApi: ClientEmployeesApiService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit() {
     this.consultantsListSubs = this.consultantsApi
@@ -50,15 +56,26 @@ export class ProjectAddFormComponent {
       );
 
     this.projectForm = this.formBuilder.group({
-      'consultant_id': [this.project.consultant_id, [Validators.required]],
-      'client_id': [this.project.client_id, [Validators.required]],
       'start_date': [this.project.start_date, [Validators.required]],
       'end_date': [this.project.end_date, [Validators.required]],
     });
   }
 
+  updateClientEmployeeList(client) {
+     this.clientEmployeesListSubs = this.clientEmployeesApi
+      .getClientEmployeesForClient(client.id)
+      .subscribe(res => {
+          this.clientEmployeesList = res;
+        },
+        console.error
+      );
+  }
+
   saveProject() {
     this.project.manager_id = 1;
+    this.project.consultant_id = this.consultantControl.value.id;
+    this.project.client_id = this.clientControl.value.id;
+    this.project.clientEmployee_id = this.clientEmployeeControl.value.id;
     this.projectsApi
       .saveProject(this.project)
       .subscribe(

@@ -3,194 +3,136 @@
 
   <mat-horizontal-stepper [linear]="false" #stepper>
     <mat-step [stepControl]="commande">
-      <form [formGroup]="commande">
-        <h3>Adentis</h3>
-        <table>
-          <tr>
-            <h4>Manager</h4>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput placeholder="Nom" value="AGER" disabled>
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput placeholder="Prénom" value="MAN" disabled>
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput placeholder="Email" value="manager@email.fr" disabled>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <h4>Consultant</h4>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <mat-select placeholder="Mes Consultants" [formControl]="consultantControl">
-                  <mat-option value="Nouveau Consultant">Nouveau Consultant</mat-option>
-                  <mat-option *ngFor="let consultant of consultants" [value]="consultant">
-                    {{consultant.lastName}} {{consultant.firstName}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput placeholder="Nom" value="{{consultantControl.value?.lastName}}" >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput placeholder="Prénom" value="{{consultantControl.value?.firstName}}" >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput placeholder="Email" value="{{consultantControl.value?.email}}" >
-              </mat-form-field>
-            </td>
-          </tr>
-        </table>
-        <h3>Client</h3>
-        <table>
-          <tr>
-            <h4>Société</h4>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <mat-select placeholder="Mes Clients" [formControl]="clientControl">
-                  <mat-option>Nouveau Client</mat-option>
-                  <mat-option *ngFor="let client of clients" [value]="client">
-                    {{client.name}}, {{client.adresse}} - {{client.city}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput placeholder="Nom" value="{{clientControl.value?.name}}">
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput placeholder="Adresse" value="{{clientControl.value?.adresse}}">
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput placeholder="Code Postal" value="{{clientControl.value?.cp}}">  
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput placeholder="Ville" value="{{clientControl.value?.city}}">
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <h4>Responsable Projet</h4>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <mat-select placeholder="Responsable projet" [formControl]="rpControl">
-                  <mat-option>Nouveau Responsable projet</mat-option>
-                  <mat-option *ngFor="let rp of rps" [value]="rp">
-                    {{rp.lastName}} {{rp.firstName}} - {{rp.title}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput #firstNameRP placeholder="Nom" value="{{rpControl.value?.lastName}}" >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput #lastNameRP placeholder="Prénom" value="{{rpControl.value?.firstName}}" >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput #titleRP placeholder="Poste" value="{{rpControl.value?.title}}" >
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput #emailRP placeholder="Email" value="{{rpControl.value?.email}}" >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput #telRP placeholder="Téléphone" value="{{rpControl.value?.tel}}" >
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button mat-button (click)="addRP(firstNameRP.value,lastNameRP.value,emailRP.value,titleRP.value,telRP.value)" color="primary">Ajouter</button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-list-item *ngFor="let rp of rpsSelected">
-                <h4 mat-line>{{rp.lastName}} {{rp.firstName}} - {{rp.title}} | <button (click)="delRP(rp)">Delete</button></h4>
-              </mat-list-item>
-            </td>
-          </tr>
-        </table>
-        <h3>Date Commande</h3>
-        <table>
-          <tr>
-            <h4>Début</h4>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput [matDatepicker]="deb" placeholder="Choissiez une date" [value]="date.value" >
-                <mat-datepicker-toggle matSuffix [for]="deb"></mat-datepicker-toggle>
-                <mat-datepicker #deb></mat-datepicker>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <h4>Fin</h4>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput [matDatepicker]="end" placeholder="Choissiez une date" [value]="date.value">
-                <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
-                <mat-datepicker #end></mat-datepicker>
-              </mat-form-field>
-            </td>
-          </tr>
-        </table>
-        <div>
-          <button mat-raised-button color="primary" matStepperNext>Next</button>
-        </div>
-      </form>
+      <h3>Adentis</h3>
+      <table>
+        <tr>
+          <td>
+            <mat-form-field>
+              <mat-select placeholder="Mes Projets" [formControl]="projectControl" (selectionChange)="onProjectChanged($event.value)">
+                <mat-option *ngFor="let project of projectsList" [value]="project">
+                  {{project.consultant[0].lastName}} {{project.consultant[0].firstName}} - {{project.client[0].name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <h4>Consultant</h4>
+        </tr>
+        <tr [formGroup]="consultantForm">
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Nom" formControlName="lastName" >
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Prénom" formControlName="firstName" >
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Email" formControlName="email" >
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Téléphone" formControlName="tel" >
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <h3>Client</h3>
+      <table>
+        <tr>
+          <h4>Société</h4>
+        </tr>
+        <tr [formGroup]="clientForm">
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Nom" formControlName="name">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Adresse" formControlName="address">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Code Postal" formControlName="cp">  
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Ville" formControlName="city">
+            </mat-form-field>
+         </td>
+        </tr>
+        <tr>
+          <h4>Responsable Projet</h4>
+        </tr>
+        <tr [formGroup]="clientEmployeeForm">
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Nom" formControlName="lastName" >
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Prénom" formControlName="firstName" >
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Poste" formControlName="title" >
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Email" formControlName="email" >
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Téléphone" formControlName="tel" >
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <h3>Date Commande</h3>
+      <table [formGroup]="projectDateForm" >
+        <tr>
+          <h4>Début</h4>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field>
+              <input matInput [matDatepicker]="deb" placeholder="Choissiez une date" formControlName="start_date">
+              <mat-datepicker-toggle matSuffix [for]="deb"></mat-datepicker-toggle>
+              <mat-datepicker #deb></mat-datepicker>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <h4>Fin</h4>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field>
+              <input matInput [matDatepicker]="end" placeholder="Choissiez une date" formControlName="end_date">
+              <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+              <mat-datepicker #end></mat-datepicker>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <div>
+        <button mat-raised-button color="primary" matStepperNext>Next</button>
+      </div>
     </mat-step>
     <mat-step [stepControl]="typeMeeting">
-      <form [formGroup]="typeMeeting">
+      <form [formGroup]="meetingForm">
         <ng-template matStepLabel></ng-template>
         <table>
           <tr>
@@ -201,13 +143,13 @@
           <tr>
             <td>
               <mat-form-field>
-                <input matInput [matDatepicker]="dateReu" placeholder="Choissiez une date" [value]="date.value" >
+                <input matInput [matDatepicker]="dateReu" placeholder="Choissiez une date" formControlName="date" [(ngModel)]="meeting.date" [value]="current_date.value" >
                 <mat-datepicker-toggle matSuffix [for]="dateReu"></mat-datepicker-toggle>
                 <mat-datepicker #dateReu></mat-datepicker>
               </mat-form-field>
             </td>
             <td>
-              <input type="time" atp-time-picker value="20:55"/>
+              <input type="time" atp-time-picker formControlName="time" [(ngModel)]="meeting.time" value="12:00"/>
             </td>
           </tr>
           <tr>
@@ -218,7 +160,7 @@
           <tr>
             <td>
               <mat-form-field>
-                <mat-select [(value)]="selected">
+                <mat-select [(value)]="selected" formControlName="subject" [(ngModel)]="meeting.subject">
                   <mat-option value="kickOff">Kick Off</mat-option>
                   <mat-option value="PAP">PAP</mat-option>
                   <mat-option value="BilanMission">Bilan de mission</mat-option>
@@ -234,11 +176,14 @@
       </form>
     </mat-step>
     <mat-step [stepControl]="bilanProjet">
-      <form [formGroup]="bilanProjet">
+      <form [formGroup]="meetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Bilan Projet</h3>
         <mat-form-field>
-          <textarea matInput placeholder="Décrivez le bilan du projet à ce jour"></textarea>
+          <textarea matInput placeholder="Quel est l'état d'avancement, les réalisations?" formControlName="project_bilan1" [(ngModel)]="meeting.project_bilan1"></textarea>
+        </mat-form-field>
+        <mat-form-field>
+          <textarea matInput placeholder="Quels sont les objectifs à court et moyen terme?" formControlName="project_bilan2" [(ngModel)]="meeting.project_bilan2"></textarea>
         </mat-form-field>
         <div>
           <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
@@ -247,15 +192,22 @@
       </form>
     </mat-step>
     <mat-step [stepControl]="bilanAdentis">
-      <form [formGroup]="bilanAdentis">
+      <form [formGroup]="meetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Bilan Adentis</h3>
-        <section class="example-section">
-          <mat-checkbox class="example-margin" >Communication</mat-checkbox>
-          <mat-checkbox class="example-margin" >Développement</mat-checkbox>
-        </section>
+        <h4>Êtes-vous satisfait de la prestation d'Adentis?</h4>
+        <mat-radio-group formControlName="adentis_bilan1" [(ngModel)]="meeting.adentis_bilan1">
+          <mat-radio-button value="Trés satisfait" >Trés satisfait</mat-radio-button>
+          <mat-radio-button value="Satisfait" >Satisfait</mat-radio-button>
+          <mat-radio-button value="Moyennement satisfait" >Moyennement satisfait</mat-radio-button>
+          <mat-radio-button value="Peu satisfait" >Peu satisfait</mat-radio-button>
+          <mat-radio-button value="Pas du tout satisfait" >Pas du tout satisfait</mat-radio-button>
+        </mat-radio-group>
         <mat-form-field>
-          <textarea matInput placeholder="Décrivez le bilan d'Adentis" ></textarea>
+          <textarea matInput placeholder="Que pensez-vous du suivi de la prestation?" formControlName="adentis_bilan2" [(ngModel)]="meeting.adentis_bilan2"></textarea>
+        </mat-form-field>
+        <mat-form-field>
+          <textarea matInput placeholder="Quels seraient nos points d'amélioration?" formControlName="adentis_bilan3" [(ngModel)]="meeting.adentis_bilan3"></textarea>
         </mat-form-field>
         <div>
           <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
@@ -264,16 +216,16 @@
       </form>
     </mat-step>
     <mat-step [stepControl]="nextMeeting">
-      <form [formGroup]="nextMeeting">
+      <form [formGroup]="nextMeetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Prochaine Réunion</h3>
           <mat-form-field>
-            <input matInput [matDatepicker]="next" placeholder="Choissiez une date" [value]="date.value" >
+            <input matInput [matDatepicker]="next" placeholder="Choissiez une date" formControlName="date" [(ngModel)]="nextMeeting.date" [value]="current_date.value" >
             <mat-datepicker-toggle matSuffix [for]="next"></mat-datepicker-toggle>
             <mat-datepicker #next></mat-datepicker>
           </mat-form-field>
-          <input type="time" atp-time-picker value="20:55"/>
-          <table>
+          <input type="time" atp-time-picker value="12:00" formControlName="time" [(ngModel)]="nextMeeting.time"/>
+          <!--<table>
           <tr>
             <h4>Manager</h4>
           </tr>
@@ -403,7 +355,7 @@
               <button mat-button (click)="addRP(lastNameRP.value,firstNameRP.value)" color="primary">Ajouter</button>
             </td>
           </tr>
-        </table>
+        </table>-->
         <div>
           <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
           <button mat-raised-button color="primary" matStepperNext>Suivant</button>
@@ -411,7 +363,7 @@
       </form>
     </mat-step>
     <mat-step [stepControl]="signature">
-      <form [formGroup]="signature">
+      <form [formGroup]="meetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Signatures</h3>
         <table>
@@ -419,24 +371,24 @@
             <h4>Manager</h4>
           </tr>
           <tr>
-            <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+            <signature-pad #manager_signaturePad [options]="signaturePadOptions" (onEndEvent)="drawComplete()"></signature-pad>
           </tr>
           <tr>
             <h4>Consultant</h4>
           </tr>
           <tr>
-            <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+            <signature-pad #consultant_signaturePad [options]="signaturePadOptions" (onEndEvent)="drawComplete()"></signature-pad>
           </tr>
           <tr>
             <h4>Client</h4>
           </tr>
           <tr>
-            <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+            <signature-pad #client_signaturePad [options]="signaturePadOptions" (onEndEvent)="drawComplete()"></signature-pad>
           </tr>
         </table>
         <div>
           <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
-          <button mat-raised-button color="primary">Sauvegarder</button>
+          <button mat-raised-button color="primary" (click)="saveMeeting()">Sauvegarder</button>
         </div>
       </form>
     </mat-step>

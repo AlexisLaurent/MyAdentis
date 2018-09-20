@@ -10,7 +10,7 @@ from .entities.clientEmployee import ClientEmployee, ClientEmployeeSchema
 from .entities.consultant import Consultant, ConsultantSchema
 from .entities.manager import Manager, ManagerSchema
 from .entities.project import Project, ProjectSchema
-from .entities.projectManager import ProjectManager, ProjectManagerSchema
+from .entities.meeting import Meeting, MeetingSchema
 
 # creating the Flask application
 app = Flask(__name__)
@@ -362,10 +362,33 @@ def get_meeting(id):
     session.close()
     return jsonify(meeting)
 
+@app.route('/simplifiedMeetings')
+def get_simplifiedMeetings():
+    # fetching from the database
+    session = Session()
+    meeting_objects = session.query(Meeting).all()
+
+    simplifiedMeetings = []
+
+    for meeting in meeting_objects :
+        simplifiedMeeting = {}
+        simplifiedMeeting["id"] = meeting.id
+        simplifiedMeeting["date"] = meeting.date
+        simplifiedMeeting["time"] = meeting.time
+        simplifiedMeeting["subject"] = meeting.subject
+        project = session.query(Project).get(meeting.project_id)
+        consultant = session.query(Consultant).get(project.consultant_id)
+        simplifiedMeeting["consultant"] = consultant.lastName + " " + consultant.firstName
+        simplifiedMeetings.append(simplifiedMeeting)
+
+    # serializing as JSON
+    session.close()
+    return jsonify(simplifiedMeetings)
+
 @app.route('/meetings', methods=['POST'])
 def add_meeting():
     # mount obj object
-    posted_meeting = MeetingSchema(only=('project_id', 'date', 'subject',
+    posted_meeting = MeetingSchema(only=('project_id', 'date', 'time', 'subject',
      'project_bilan1', 'project_bilan2', 'adentis_bilan1', 'adentis_bilan2', 'adentis_bilan3' ,
      'manager_signature', 'consultant_signature', 'client_signature'))\
         .load(request.get_json())
@@ -390,6 +413,7 @@ def update_meeting(id):
 
     meeting_object.project_id = request.get_json().get('project_id')
     meeting_object.date = request.get_json().get('date')
+    meeting_object.time = request.get_json().get('time')
     meeting_object.subject = request.get_json().get('subject')
     meeting_object.project_bilan1 = request.get_json().get('project_bilan1')
     meeting_object.project_bilan2 = request.get_json().get('project_bilan2')
@@ -433,29 +457,6 @@ def get_projects():
     session.close()
     return jsonify(project.data)
 
-@app.route('/detailedProjects')
-def get_detailedProjects():
-    # fetching from the database
-    session = Session()
-    project_objects = session.query(Project).all()
-
-    detailedProjects = []
-
-    for project in project_objects :
-        detailedProject = {}
-        detailedProject["id"] = project.id;
-        c = session.query(Consultant).get(project.consultant_id)
-        detailedProject["consultant"] = c.lastName + " " + c.firstName
-        detailedProject["manager"] = session.query(Manager).get(project.manager_id).lastName
-        detailedProject["client"] = session.query(Client).get(project.client_id).name
-        detailedProject["start_date"] = project.start_date
-        detailedProject["end_date"] = project.end_date
-        detailedProjects.append(detailedProject)
-
-    # serializing as JSON
-    session.close()
-    return jsonify(detailedProjects)
-
 @app.route('/projects/<id>')
 def get_project(id):
     # fetching from the database
@@ -470,11 +471,53 @@ def get_project(id):
     session.close()
     return jsonify(project)
 
+@app.route('/detailedProjects')
+def get_detailedProjects():
+    # fetching from the database
+    session = Session()
+    project_objects = session.query(Project).all()
+
+    detailedProjects = []
+
+    for project in project_objects :
+        detailedProject = {}
+        detailedProject["id"] = project.id;
+        detailedProject["consultant"] = ConsultantSchema().dump(session.query(Consultant).get(project.consultant_id))
+        detailedProject["manager"] = ManagerSchema().dump(session.query(Manager).get(project.manager_id))
+        detailedProject["client"] = ClientSchema().dump(session.query(Client).get(project.client_id))
+        detailedProject["clientEmployee"] =  ClientEmployeeSchema().dump(session.query(ClientEmployee).get(project.clientEmployee_id))
+        detailedProject["start_date"] = project.start_date
+        detailedProject["end_date"] = project.end_date
+        detailedProjects.append(detailedProject)
+
+    # serializing as JSON
+    session.close()
+    return jsonify(detailedProjects)
+
+@app.route('/detailedProjects/<id>')
+def get_detailedProject(id):
+    # fetching from the database
+    session = Session()
+    project = session.query(Project).get(id)
+
+    detailedProject = {}
+    detailedProject["id"] = project.id;
+    detailedProject["consultant"] = ConsultantSchema().dump(session.query(Consultant).get(project.consultant_id))
+    detailedProject["manager"] = ManagerSchema().dump(session.query(Manager).get(project.manager_id))
+    detailedProject["client"] = ClientSchema().dump(session.query(Client).get(project.client_id))
+    detailedProject["clientEmployee"] = ClientEmployeeSchema().dump(session.query(ClientEmployee).get(project.clientEmployee_id))
+    detailedProject["start_date"] = project.start_date
+    detailedProject["end_date"] = project.end_date
+
+    # serializing as JSON
+    session.close()
+    return jsonify(detailedProject)
+
 @app.route('/projects', methods=['POST'])
 def add_project():
     # mount obj object
     posted_project = ProjectSchema(only=('manager_id', 'consultant_id', 'client_id',
-     'client_address_id', 'start_date', 'end_date'))\
+     'clientEmployee_id', 'start_date', 'end_date'))\
         .load(request.get_json())
 
     project = Project(**posted_project.data, created_by="HTTP post request")
@@ -498,7 +541,7 @@ def update_project(id):
     project_object.manager_id = request.get_json().get('manager_id')
     project_object.consultant_id = request.get_json().get('consultant_id')
     project_object.client_id = request.get_json().get('client_id')
-    project_object.client_address_id = request.get_json().get('client_address_id')
+    project_object.clientEmployee_id = request.get_json().get('clientEmployee_id')
     project_object.start_date = request.get_json().get('start_date')
     project_object.end_date = request.get_json().get('end_date')
 
@@ -516,66 +559,6 @@ def delete_project(id):
     project_object = session.query(Project).get(id)
 
     session.delete(project_object)
-    session.commit()
-    session.close()
-    return '201'
-
-# PROJECT MANAGER
-@app.route('/projectManagers')
-def get_projectManagers():
-    # fetching from the database
-    session = Session()
-    projectManager_objects = session.query(ProjectManager).all()
-
-    # transforming into JSON-serializable objects
-    schema = ProjectManagerSchema(many=True)
-    projectManagers = schema.dump(projectManager_objects)
-
-    # serializing as JSON
-    session.close()
-    return jsonify(projectManagers.data)
-
-@app.route('/projectManagers', methods=['POST'])
-def add_projectManager():
-    # mount obj object
-    posted_projectManager = ProjectManagerSchema(only=('project_id', 'clientEmployee_id'))\
-        .load(request.get_json())
-
-    projectManager = ProjectManager(**posted_projectManager.data, created_by="HTTP post request")
-
-    # persist obj
-    session = Session()
-    session.add(projectManager)
-    session.commit()
-
-    # return created obj
-    new_projectManager =ProjectManagerSchema().dump(projectManager).data
-    session.close()
-    return jsonify(new_projectManager), 201
-
-@app.route('/projectManagers/<id>', methods=['PUT'])
-def update_projectManager(id):
-    # fetching from the database
-    session = Session()
-    projectManager_object = session.query(ProjectManager).get(id)
-
-    projectManager_object.manager_id = request.get_json().get('manager_id')
-    projectManager_object.consultant_id = request.get_json().get('consultant_id')
-
-    session.commit()
-
-    # return created obj
-    new_projectManager = ProjectManagerSchema().dump(projectManager_object).data
-    session.close()
-    return jsonify(new_projectManager), 201
-
-@app.route('/projectManagers/<id>', methods=['DELETE'])
-def delete_projectManager(id):
-    # fetching from the database
-    session = Session()
-    projectManager_object = session.query(ProjectManager).get(id)
-
-    session.delete(projectManager_object)
     session.commit()
     session.close()
     return '201'
