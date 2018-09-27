@@ -388,10 +388,7 @@ def get_simplifiedMeetings():
 @app.route('/meetings', methods=['POST'])
 def add_meeting():
     # mount obj object
-    posted_meeting = MeetingSchema(only=('project_id', 'date', 'time', 'subject',
-     'project_bilan1', 'project_bilan2', 'adentis_bilan1', 'adentis_bilan2', 'adentis_bilan3' ,
-     'manager_signature', 'consultant_signature', 'client_signature'))\
-        .load(request.get_json())
+    posted_meeting = MeetingSchema().load(request.get_json())
 
     meeting = Meeting(**posted_meeting.data, created_by="HTTP post request")
 

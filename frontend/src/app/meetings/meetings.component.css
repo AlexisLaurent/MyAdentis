@@ -16,3 +16,7 @@ table {
 .example-margin {
   margin: 0 20px;
 }
+
+.subject_button {
+	display : inline-block;
+}

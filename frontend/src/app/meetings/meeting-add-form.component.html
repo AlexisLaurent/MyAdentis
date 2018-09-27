@@ -161,9 +161,9 @@
             <td>
               <mat-form-field>
                 <mat-select [(value)]="selected" formControlName="subject" [(ngModel)]="meeting.subject">
-                  <mat-option value="kickOff">Kick Off</mat-option>
+                  <mat-option value="kick Off">Kick Off</mat-option>
                   <mat-option value="PAP">PAP</mat-option>
-                  <mat-option value="BilanMission">Bilan de mission</mat-option>
+                  <mat-option value="Bilan de mission">Bilan de mission</mat-option>
                 </mat-select>
               </mat-form-field>
             </td>
@@ -171,11 +171,16 @@
         </table>
         <div>
           <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
-          <button mat-raised-button color="primary" matStepperNext>Suivant</button>
+          <div *ngIf="meeting.subject!='PAP'" class="subject_button">
+            <button mat-raised-button color="primary" (click)="saveMeeting()" [hidden]="true">Sauvegarder</button>
+          </div>
+          <div *ngIf="meeting.subject=='PAP'" class="subject_button">
+            <button mat-raised-button color="primary" matStepperNext [hidden]="False">Suivant</button>
+          </div>
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="bilanProjet">
+    <mat-step [stepControl]="bilanProjet" *ngIf="meeting.subject=='PAP'">
       <form [formGroup]="meetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Bilan Projet</h3>
@@ -191,7 +196,7 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="bilanAdentis">
+    <mat-step [stepControl]="bilanAdentis" *ngIf="meeting.subject=='PAP'">
       <form [formGroup]="meetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Bilan Adentis</h3>
@@ -215,154 +220,52 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="nextMeeting">
+    <mat-step [stepControl]="nextMeeting" *ngIf="meeting.subject=='PAP'">
       <form [formGroup]="nextMeetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Prochaine Réunion</h3>
-          <mat-form-field>
-            <input matInput [matDatepicker]="next" placeholder="Choissiez une date" formControlName="date" [(ngModel)]="nextMeeting.date" [value]="current_date.value" >
-            <mat-datepicker-toggle matSuffix [for]="next"></mat-datepicker-toggle>
-            <mat-datepicker #next></mat-datepicker>
-          </mat-form-field>
-          <input type="time" atp-time-picker value="12:00" formControlName="time" [(ngModel)]="nextMeeting.time"/>
-          <!--<table>
+        <table>
           <tr>
-            <h4>Manager</h4>
+            <td>
+              <h4>Date de la réunion</h4>
+            </td>
           </tr>
           <tr>
             <td>
               <mat-form-field>
-                <mat-select placeholder="Manager" [formControl]="managerControl">
-                  <mat-option *ngFor="let manager of managers" [value]="manager">
-                    {{manager.lastName}} {{manager.firstName}}
-                  </mat-option>
+                <input matInput [matDatepicker]="next" placeholder="Choissiez une date" formControlName="date" [(ngModel)]="nextMeeting.date" [value]="current_date.value" >
+                <mat-datepicker-toggle matSuffix [for]="next"></mat-datepicker-toggle>
+                <mat-datepicker #next></mat-datepicker>
+              </mat-form-field>
+            </td>
+            <td>
+              <input type="time" atp-time-picker value="12:00" formControlName="time" [(ngModel)]="nextMeeting.time"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h3>Ordre du jour</h3>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field>
+                <mat-select [(value)]="selected" formControlName="subject" [(ngModel)]="nextMeeting.subject">
+                  <mat-option value="kick Off">Kick Off</mat-option>
+                  <mat-option value="PAP">PAP</mat-option>
+                  <mat-option value="Bilan de mission">Bilan de mission</mat-option>
                 </mat-select>
               </mat-form-field>
             </td>
           </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput #lastNameManager placeholder="Nom" value={{managerControl.value?.lastName}} >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput #firstNameManager placeholder="Prénom" value={{managerControl.value?.firstName}} >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput #emailManager placeholder="Email" value={{managerControl.value?.email}}>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-list-item *ngFor="let m of managersSelected">
-                <h4 mat-line>{{m.lastName}} {{m.firstName}} | <button (click)="delManager(m)">Delete</button></h4>
-              </mat-list-item>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button mat-button (click)="addManager(lastNameManager.value,firstNameManager.value)" color="primary">Ajouter</button>
-            </td>
-          </tr>
-          <tr>
-            <h4>Consultant</h4>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <mat-select placeholder="Consultant" [formControl]="consultantControl">
-                  <mat-option *ngFor="let consultant of consultants" [value]="consultant">
-                    {{consultant.lastName}} {{consultant.firstName}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput #lastNameConsultant placeholder="Nom" value={{consultantControl.value?.firstName}} >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput #firstNameConsultant placeholder="Prénom" value={{consultantControl.value?.lastName}} >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput #emailConsultant placeholder="Email" value={{consultantControl.value?.email}}>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-list-item *ngFor="let c of consultantsSelected">
-                <h4 mat-line>{{c.lastName}} {{c.firstName}} | <button (click)="delConsultant(c)">Delete</button></h4>
-              </mat-list-item>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button mat-button (click)="addConsultant(lastNameConsultant.value,firstNameConsultant.value)" color="primary">Ajouter</button>
-            </td>
-          </tr>
-          <tr>
-            <h4>Responsable Projet</h4>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <mat-select placeholder="Responsable Projet" [formControl]="rpControl">
-                  <mat-option *ngFor="let rp of rps" [value]="rp">
-                    {{rp.lastName}} {{rp.firstName}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field>
-                <input matInput #lastNameRP placeholder="Nom" value={{rpControl.value?.lastName}} >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput #firstNameRP placeholder="Prénom" value={{rpControl.value?.firstName}} >
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field>
-                <input matInput #emailRP placeholder="Email" value={{rpControl.value?.email}}>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-list-item *ngFor="let rp of rpsSelected">
-                <h4 mat-line>{{rp.lastName}} {{rp.firstName}} | <button (click)="delRP(rp)">Delete</button></h4>
-              </mat-list-item>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button mat-button (click)="addRP(lastNameRP.value,firstNameRP.value)" color="primary">Ajouter</button>
-            </td>
-          </tr>
-        </table>-->
+        </table>
         <div>
           <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
           <button mat-raised-button color="primary" matStepperNext>Suivant</button>
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="signature">
+    <mat-step [stepControl]="signature" *ngIf="meeting.subject=='PAP'">
       <form [formGroup]="meetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Signatures</h3>

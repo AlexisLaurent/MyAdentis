@@ -93,8 +93,9 @@ export class MeetingAddFormComponent implements OnInit {
     });
 
     this.nextMeetingForm = this.formBuilder.group({
-      date: [this.meeting.date, Validators.required],
-      time: [this.meeting.time, Validators.required],
+      date: [this.nextMeeting.date, Validators.required],
+      time: [this.nextMeeting.time, Validators.required],
+      subject: [this.nextMeeting.date, Validators.required],
     });
   }
 
@@ -130,63 +131,6 @@ export class MeetingAddFormComponent implements OnInit {
   }
 
   current_date = new FormControl(new Date());
-
-  managerControl = new FormControl('');
-  managers = [
-    {firstName: 'Tom', lastName: 'KIHY', email: 'tkihy@email.fr'},
-  ];
-  managersSelected = [];
-
-  consultantControl = new FormControl('');
-  consultants = [
-    {firstName: 'Will', lastName: 'SMITH', email: 'wsmith@email.fr'},
-    {firstName: 'Brad', lastName: 'PITT', email: 'bpitt@email.fr'},
-    {firstName: 'Natalie', lastName: 'PORTMAN', email: 'nportman@email.fr'},
-  ];
-  consultantsSelected = [];
-
-  clientControl = new FormControl('');
-  clients = [
-    {name: 'MIB', adresse: '12 rue des Pins', cp: '31000', city: 'TOULOUSE'},
-    {name: 'Fight Club', adresse: '24 avenue des Fleurs', cp: '31120', city: 'ROQUES'},
-  ];
-
-  rpControl = new FormControl('');
-  rps = [
-    {firstName: 'Peter', lastName: 'CALE', email: 'pcale@email.fr', title: 'Manager', tel: '0661487598'},
-    {firstName: 'Julie', lastName: 'MIRAN', email: 'jmiran@email.fr', title: 'Chef de Projet', tel: '0624587451'},
-  ];
-  rpsSelected = [];
-
-  addManager(firstName,lastName,email,title,tel){
-    let item = {firstName: firstName, lastName: lastName, email: email, title: title, tel: tel};
-    this.managersSelected.push(item);
-  }
-
-  delManager(item){
-    let index = this.managersSelected.indexOf(item);
-    this.managersSelected.splice(index,1);
-  }
-
-  addConsultant(firstName,lastName,email,title,tel){
-    let item = {firstName: firstName, lastName: lastName, email: email, title: title, tel: tel};
-    this.consultantsSelected.push(item);
-  }
-
-  delConsultant(item){
-    let index = this.consultantsSelected.indexOf(item);
-    this.consultantsSelected.splice(index,1);
-  }
-
-  addRP(firstName,lastName,email,title,tel){
-    let item = {firstName: firstName, lastName: lastName, email: email, title: title, tel: tel};
-    this.rpsSelected.push(item);
-  }
-
-  delRP(item){
-    let index = this.rpsSelected.indexOf(item);
-    this.rpsSelected.splice(index,1);
-  }
 
   open() {
     const amazingTimePicker = this.atp.open();
@@ -231,12 +175,15 @@ export class MeetingAddFormComponent implements OnInit {
         error => alert(error.message)
       );
 
-    this.meetingsApi
+    if (this.meeting.subject == "PAP"){
+      this.nextMeeting.project_id = this.meeting.project_id;
+      this.meetingsApi
       .saveMeeting(this.nextMeeting)
       .subscribe(
         () => this.router.navigate(['/meetings']),
         error => alert(error.message)
       );
+    }
   }
 }
 
