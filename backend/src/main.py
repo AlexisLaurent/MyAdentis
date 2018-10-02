@@ -385,6 +385,38 @@ def get_simplifiedMeetings():
     session.close()
     return jsonify(simplifiedMeetings)
 
+@app.route('/detailedMeetings/<id>')
+def get_detailedMeeting(id):
+    # fetching from the database
+    session = Session()
+    meeting_object = session.query(Meeting).get(id)
+
+    detailedMeeting = {}
+    detailedMeeting["id"] = meeting_object.id;
+    detailedMeeting["project_id"] = meeting_object.project_id;
+    project = session.query(Project).get(meeting_object.project_id)
+    detailedMeeting["consultant"] = ConsultantSchema().dump(session.query(Consultant).get(project.consultant_id))
+    detailedMeeting["client"] = ClientSchema().dump(session.query(Client).get(project.client_id))
+    detailedMeeting["clientEmployee"] = ClientEmployeeSchema().dump(session.query(ClientEmployee).get(project.clientEmployee_id))
+    detailedMeeting["start_date"] = project.start_date
+    detailedMeeting["end_date"] = project.end_date
+    detailedMeeting["date"] = meeting_object.date
+    detailedMeeting["time"] = meeting_object.time
+    detailedMeeting["subject"] = meeting_object.subject
+    detailedMeeting["project_bilan1"] = meeting_object.project_bilan1
+    detailedMeeting["project_bilan2"] = meeting_object.project_bilan2
+    detailedMeeting["adentis_bilan1"] = meeting_object.adentis_bilan1
+    detailedMeeting["adentis_bilan2"] = meeting_object.adentis_bilan2
+    detailedMeeting["adentis_bilan3"] = meeting_object.adentis_bilan3
+    detailedMeeting["manager_signature"] = meeting_object.manager_signature
+    detailedMeeting["consultant_signature"] = meeting_object.consultant_signature
+    detailedMeeting["client_signature"] = meeting_object.client_signature
+
+    # serializing as JSON
+    session.close()
+    return jsonify(detailedMeeting)
+
+
 @app.route('/meetings', methods=['POST'])
 def add_meeting():
     # mount obj object

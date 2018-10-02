@@ -44,6 +44,14 @@ export class MeetingsApiService {
       );
   }
 
+  getDetailedMeeting(id: Number): Observable<any> {
+    return this.http
+      .get<any>(this.API_URL + "/detailedMeetings/" + id)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   saveMeeting(meeting: Meeting): Observable<any> {
     return this.http
       .post(this.API_URL + "/meetings", meeting)

@@ -53,7 +53,7 @@ const appRoutes: Routes = [
   { path: '', component: MeetingsComponent },
   { path: 'meetings', component: MeetingsComponent },
   { path: 'new-meeting', component: MeetingAddFormComponent },
-  { path: 'edit-meeting', component: MeetingEditFormComponent },
+  { path: 'edit-meeting/:id', component: MeetingEditFormComponent },
   { path: 'consultants', component: ConsultantsComponent },
   { path: 'new-consultant/:id', component: ConsultantAddFormComponent },
   { path: 'edit-consultant/:id', component: ConsultantEditFormComponent },

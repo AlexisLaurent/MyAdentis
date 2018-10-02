@@ -1,5 +1,5 @@
 <div>
-  <h2>Nouvelle Réunion</h2>
+  <h2>Modifier Réunion</h2>
 
   <mat-horizontal-stepper [linear]="false" #stepper>
     <mat-step [stepControl]="commande">
@@ -143,13 +143,13 @@
           <tr>
             <td>
               <mat-form-field>
-                <input matInput [matDatepicker]="dateReu" placeholder="Choissiez une date" formControlName="date" [(ngModel)]="meeting.date" [value]="current_date.value" >
+                <input matInput [matDatepicker]="dateReu" placeholder="Choissiez une date" formControlName="date" [value]="current_date.value" >
                 <mat-datepicker-toggle matSuffix [for]="dateReu"></mat-datepicker-toggle>
                 <mat-datepicker #dateReu></mat-datepicker>
               </mat-form-field>
             </td>
             <td>
-              <input type="time" atp-time-picker formControlName="time" [(ngModel)]="meeting.time" value="12:00"/>
+              <input type="time" atp-time-picker formControlName="time" value="12:00"/>
             </td>
           </tr>
           <tr>
@@ -160,7 +160,7 @@
           <tr>
             <td>
               <mat-form-field>
-                <mat-select [(value)]="selected" formControlName="subject" [(ngModel)]="meeting.subject">
+                <mat-select [(value)]="selected" formControlName="subject">
                   <mat-option value="kick Off">Kick Off</mat-option>
                   <mat-option value="PAP">PAP</mat-option>
                   <mat-option value="Bilan de mission">Bilan de mission</mat-option>
@@ -171,24 +171,24 @@
         </table>
         <div>
           <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
-          <div *ngIf="meeting.subject!='PAP'" class="subject_button">
-            <button mat-raised-button color="primary" (click)="saveMeeting()" [hidden]="true">Sauvegarder</button>
+          <div *ngIf="meetingForm.get('subject').value!='PAP'" class="subject_button">
+            <button mat-raised-button color="primary" (click)="updateMeeting()" [hidden]="true">Sauvegarder</button>
           </div>
-          <div *ngIf="meeting.subject=='PAP'" class="subject_button">
+          <div *ngIf="meetingForm.get('subject').value=='PAP'" class="subject_button">
             <button mat-raised-button color="primary" matStepperNext [hidden]="False">Suivant</button>
           </div>
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="bilanProjet" *ngIf="meeting.subject=='PAP'">
+    <mat-step [stepControl]="bilanProjet" *ngIf="meetingForm.get('subject').value=='PAP'">
       <form [formGroup]="meetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Bilan Projet</h3>
         <mat-form-field>
-          <textarea matInput placeholder="Quel est l'état d'avancement, les réalisations?" formControlName="project_bilan1" [(ngModel)]="meeting.project_bilan1"></textarea>
+          <textarea matInput placeholder="Quel est l'état d'avancement, les réalisations?" formControlName="project_bilan1"></textarea>
         </mat-form-field>
         <mat-form-field>
-          <textarea matInput placeholder="Quels sont les objectifs à court et moyen terme?" formControlName="project_bilan2" [(ngModel)]="meeting.project_bilan2"></textarea>
+          <textarea matInput placeholder="Quels sont les objectifs à court et moyen terme?" formControlName="project_bilan2"></textarea>
         </mat-form-field>
         <div>
           <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
@@ -196,12 +196,12 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="bilanAdentis" *ngIf="meeting.subject=='PAP'">
+    <mat-step [stepControl]="bilanAdentis" *ngIf="meetingForm.get('subject').value=='PAP'">
       <form [formGroup]="meetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Bilan Adentis</h3>
         <h4>Êtes-vous satisfait de la prestation d'Adentis?</h4>
-        <mat-radio-group formControlName="adentis_bilan1" [(ngModel)]="meeting.adentis_bilan1">
+        <mat-radio-group formControlName="adentis_bilan1">
           <mat-radio-button value="Trés satisfait" >Trés satisfait</mat-radio-button>
           <mat-radio-button value="Satisfait" >Satisfait</mat-radio-button>
           <mat-radio-button value="Moyennement satisfait" >Moyennement satisfait</mat-radio-button>
@@ -209,10 +209,10 @@
           <mat-radio-button value="Pas du tout satisfait" >Pas du tout satisfait</mat-radio-button>
         </mat-radio-group>
         <mat-form-field>
-          <textarea matInput placeholder="Que pensez-vous du suivi de la prestation?" formControlName="adentis_bilan2" [(ngModel)]="meeting.adentis_bilan2"></textarea>
+          <textarea matInput placeholder="Que pensez-vous du suivi de la prestation?" formControlName="adentis_bilan2"></textarea>
         </mat-form-field>
         <mat-form-field>
-          <textarea matInput placeholder="Quels seraient nos points d'amélioration?" formControlName="adentis_bilan3" [(ngModel)]="meeting.adentis_bilan3"></textarea>
+          <textarea matInput placeholder="Quels seraient nos points d'amélioration?" formControlName="adentis_bilan3"></textarea>
         </mat-form-field>
         <div>
           <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
@@ -220,7 +220,7 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="nextMeeting" *ngIf="meeting.subject=='PAP'">
+    <mat-step [stepControl]="nextMeeting" *ngIf="meetingForm.get('subject').value=='PAP'">
       <form [formGroup]="nextMeetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Prochaine Réunion</h3>
@@ -233,13 +233,13 @@
           <tr>
             <td>
               <mat-form-field>
-                <input matInput [matDatepicker]="next" placeholder="Choissiez une date" formControlName="date" [(ngModel)]="nextMeeting.date" [value]="current_date.value" >
+                <input matInput [matDatepicker]="next" placeholder="Choissiez une date" formControlName="date" [value]="current_date.value" >
                 <mat-datepicker-toggle matSuffix [for]="next"></mat-datepicker-toggle>
                 <mat-datepicker #next></mat-datepicker>
               </mat-form-field>
             </td>
             <td>
-              <input type="time" atp-time-picker value="12:00" formControlName="time" [(ngModel)]="nextMeeting.time"/>
+              <input type="time" atp-time-picker value="12:00" formControlName="time"/>
             </td>
           </tr>
           <tr>
@@ -250,7 +250,7 @@
           <tr>
             <td>
               <mat-form-field>
-                <mat-select [(value)]="selected" formControlName="subject" [(ngModel)]="nextMeeting.subject">
+                <mat-select [(value)]="selected" formControlName="subject">
                   <mat-option value="kick Off">Kick Off</mat-option>
                   <mat-option value="PAP">PAP</mat-option>
                   <mat-option value="Bilan de mission">Bilan de mission</mat-option>
@@ -265,7 +265,7 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="signature" *ngIf="meeting.subject=='PAP'">
+    <mat-step [stepControl]="signature" *ngIf="meetingForm.get('subject').value=='PAP'">
       <form [formGroup]="meetingForm">
         <ng-template matStepLabel></ng-template>
         <h3>Signatures</h3>
@@ -291,7 +291,7 @@
         </table>
         <div>
           <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
-          <button mat-raised-button color="primary" (click)="saveMeeting()">Sauvegarder</button>
+          <button mat-raised-button color="primary" (click)="updateMeeting()">Sauvegarder</button>
         </div>
       </form>
     </mat-step>
