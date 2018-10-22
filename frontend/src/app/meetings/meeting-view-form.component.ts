@@ -18,18 +18,15 @@ import {ClientEmployee} from '../clientEmployees/clientEmployee.model';
 import {ClientEmployeesApiService} from '../clientEmployees/clientEmployees-api.service';
 
 @Component({
-  selector: 'meeting-edit-form',
-  templateUrl: 'meeting-edit-form.component.html',
+  selector: 'meeting-view-form',
+  templateUrl: 'meeting-view-form.component.html',
   styleUrls: ['meetings.component.css']
 })
-export class MeetingEditFormComponent {
+export class MeetingViewFormComponent {
   meeting = new Meeting();
   detailedMeeting: DetailedMeeting;
   meetingsListSubs: Subscription;
   meetingForm: FormGroup;
-
-  nextMeeting = new Meeting();
-  nextMeetingForm: FormGroup;
 
   projectsListSubs: Subscription;
   projectsList: DetailedProject[];
@@ -81,20 +78,14 @@ export class MeetingEditFormComponent {
     });
 
     this.meetingForm = this.formBuilder.group({
-      date: ['', Validators.required],
-      time: ['', Validators.required],
-      subject: ['', Validators.required],
-      project_bilan1: [''],
-      project_bilan2: [''],
-      adentis_bilan1: [''],
-      adentis_bilan2: [''],
-      adentis_bilan3: [''],
-    });
-
-    this.nextMeetingForm = this.formBuilder.group({
-      date: [this.nextMeeting.date],
-      time: [this.nextMeeting.time],
-      subject: [this.nextMeeting.subject],
+      date: [{value: '', disabled: true}, Validators.required],
+      time: [{value: '', disabled: true}, Validators.required],
+      subject: [{value: '', disabled: true}, Validators.required],
+      project_bilan1: [{value: '', disabled: true}, Validators.required],
+      project_bilan2: [{value: '', disabled: true}, Validators.required],
+      adentis_bilan1: [{value: '', disabled: true}, Validators.required],
+      adentis_bilan2: [{value: '', disabled: true}, Validators.required],
+      adentis_bilan3: [{value: '', disabled: true}, Validators.required],
     });
 
     this.meetingsListSubs = this.meetingsApi
@@ -151,37 +142,6 @@ export class MeetingEditFormComponent {
       );
   }
 
-  onProjectChanged(project) {
-    this.meeting.project_id = project.id
-
-    this.consultantForm.setValue({
-      firstName: project.consultant[0].firstName,
-      lastName: project.consultant[0].lastName,
-      email: project.consultant[0].email,
-      tel: project.consultant[0].tel,
-    });
-
-    this.clientForm.setValue({
-      name: project.client[0].name,
-      address: project.client[0].address,
-      cp: project.client[0].cp,
-      city: project.client[0].city,
-    });
-
-    this.clientEmployeeForm.setValue({
-      firstName: project.clientEmployee[0].firstName,
-      lastName: project.clientEmployee[0].lastName,
-      email: project.clientEmployee[0].email,
-      tel: project.clientEmployee[0].tel,
-      title: project.clientEmployee[0].title,
-    });
-
-    this.projectDateForm = this.formBuilder.group({
-      start_date: new Date(project.start_date),
-      end_date: new Date(project.end_date),
-    });
-  }
-
   current_date = new FormControl(new Date());
 
   open() {
@@ -196,7 +156,7 @@ export class MeetingEditFormComponent {
   @ViewChild('client_signaturePad') client_signaturePad: SignaturePad;
   @ViewChild('manager_signaturePad') manager_signaturePad: SignaturePad;
 
-  loadSignaturePad() {
+  ngAfterViewInit() {
     this.manager_signaturePad.set('minWidth', 5);
     this.manager_signaturePad.clear();
     this.manager_signaturePad.fromDataURL(this.detailedMeeting.manager_signature);
@@ -208,44 +168,6 @@ export class MeetingEditFormComponent {
     this.client_signaturePad.set('minWidth', 5);
     this.client_signaturePad.clear();
     this.client_signaturePad.fromDataURL(this.detailedMeeting.client_signature);
-  }
- 
-  drawComplete() {
-    this.meeting.manager_signature = this.manager_signaturePad.toDataURL();
-    this.meeting.consultant_signature = this.consultant_signaturePad.toDataURL();
-    this.meeting.client_signature = this.client_signaturePad.toDataURL();
-  }
-
-  updateMeeting() {
-    this.meeting.id = this.detailedMeeting.id;
-    this.meeting.date = this.meetingForm.get('date').value;
-    this.meeting.time = this.meetingForm.get('time').value;
-    this.meeting.subject = this.meetingForm.get('subject').value;
-    
-    if(this.meeting.subject == "PAP"){
-      this.meeting.project_bilan1 = this.meetingForm.get('project_bilan1').value;
-      this.meeting.project_bilan2 = this.meetingForm.get('project_bilan2').value;
-      this.meeting.adentis_bilan1 = this.meetingForm.get('adentis_bilan1').value;
-      this.meeting.adentis_bilan2 = this.meetingForm.get('adentis_bilan2').value;
-      this.meeting.adentis_bilan3 = this.meetingForm.get('adentis_bilan3').value;
-    }
-
-    this.meetingsApi
-      .updateMeeting(this.meeting)
-      .subscribe(
-        () => this.router.navigate(['/meetings']),
-        error => alert(error.message)
-      );
-
-    if (this.meeting.subject == "PAP" && this.nextMeeting.subject != "" && this.nextMeeting.subject != undefined){
-      this.nextMeeting.project_id = this.meeting.project_id;
-      this.meetingsApi
-      .saveMeeting(this.nextMeeting)
-      .subscribe(
-        () => this.router.navigate(['/meetings']),
-        error => alert(error.message)
-      );
-    }
   }
 }
 

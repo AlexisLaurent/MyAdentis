@@ -1,0 +1,208 @@
+<div>
+  <h2>Visualiser réunion</h2>
+  <h3>Intervenants</h3>
+  <table>
+    <tr>
+      <h4>Consultant</h4>
+    </tr>
+    <tr [formGroup]="consultantForm">
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Nom" formControlName="lastName" >
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Prénom" formControlName="firstName" >
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Email" formControlName="email" >
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Téléphone" formControlName="tel" >
+        </mat-form-field>
+      </td>
+    </tr>
+  </table>
+  <h3>Client</h3>
+  <table>
+    <tr>
+      <h4>Société</h4>
+    </tr>
+    <tr [formGroup]="clientForm">
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Nom" formControlName="name">
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Adresse" formControlName="address">
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Code Postal" formControlName="cp">  
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Ville" formControlName="city">
+        </mat-form-field>
+     </td>
+    </tr>
+    <tr>
+      <h4>Responsable Projet</h4>
+    </tr>
+    <tr [formGroup]="clientEmployeeForm">
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Nom" formControlName="lastName" >
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Prénom" formControlName="firstName" >
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Poste" formControlName="title" >
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Email" formControlName="email" >
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Téléphone" formControlName="tel" >
+        </mat-form-field>
+      </td>
+    </tr>
+  </table>
+  <h3>Date Commande</h3>
+  <table [formGroup]="projectDateForm" >
+    <tr>
+      <h4>Début</h4>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field>
+          <input matInput [matDatepicker]="deb" placeholder="Choissiez une date" formControlName="start_date">
+          <mat-datepicker-toggle matSuffix [for]="deb"></mat-datepicker-toggle>
+          <mat-datepicker #deb></mat-datepicker>
+        </mat-form-field>
+      </td>
+    </tr>
+    <tr>
+      <h4>Fin</h4>
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field>
+          <input matInput [matDatepicker]="end" placeholder="Choissiez une date" formControlName="end_date">
+          <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+          <mat-datepicker #end></mat-datepicker>
+        </mat-form-field>
+      </td>
+    </tr>
+  </table>
+
+  <form [formGroup]="meetingForm">
+    <table>
+      <tr>
+        <td>
+          <h4>Date de la réunion</h4>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dateReu" placeholder="Choissiez une date" formControlName="date" [value]="current_date.value" >
+            <mat-datepicker-toggle matSuffix [for]="dateReu"></mat-datepicker-toggle>
+            <mat-datepicker #dateReu></mat-datepicker>
+          </mat-form-field>
+        </td>
+        <td>
+          <input matInput formControlName="time">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>Ordre du jour</h3>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field>
+            <mat-select [(value)]="selected" formControlName="subject">
+              <mat-option value="Kick off">Kick off</mat-option>
+              <mat-option value="PAP">PAP</mat-option>
+              <mat-option value="Bilan de mission">Bilan de mission</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <div *ngIf="meetingForm.get('subject').value=='PAP'">
+    <form [formGroup]="meetingForm">
+      <h3>Bilan Projet</h3>
+      <mat-form-field>
+        <textarea matInput placeholder="Quel est l'état d'avancement, les réalisations?" formControlName="project_bilan1"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput placeholder="Quels sont les objectifs à court et moyen terme?" formControlName="project_bilan2"></textarea>
+      </mat-form-field>
+    </form>
+
+    <form [formGroup]="meetingForm">
+      <h3>Bilan Adentis</h3>
+      <h4>Êtes-vous satisfait de la prestation d'Adentis?</h4>
+      <mat-radio-group formControlName="adentis_bilan1">
+        <mat-radio-button value="Trés satisfait" >Trés satisfait</mat-radio-button>
+        <mat-radio-button value="Satisfait" >Satisfait</mat-radio-button>
+        <mat-radio-button value="Moyennement satisfait" >Moyennement satisfait</mat-radio-button>
+        <mat-radio-button value="Peu satisfait" >Peu satisfait</mat-radio-button>
+        <mat-radio-button value="Pas du tout satisfait" >Pas du tout satisfait</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field>
+        <textarea matInput placeholder="Que pensez-vous du suivi de la prestation?" formControlName="adentis_bilan2"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput placeholder="Quels seraient nos points d'amélioration?" formControlName="adentis_bilan3"></textarea>
+      </mat-form-field>
+    </form>
+
+    <form [formGroup]="meetingForm">
+      <h3>Signatures</h3>
+      <table>
+        <tr>
+          <h4>Manager</h4>
+        </tr>
+        <tr>
+          <signature-pad #manager_signaturePad [options]="signaturePadOptions"></signature-pad>
+        </tr>
+        <tr>
+          <h4>Consultant</h4>
+        </tr>
+        <tr>
+          <signature-pad #consultant_signaturePad [options]="signaturePadOptions"></signature-pad>
+        </tr>
+        <tr>
+          <h4>Client</h4>
+        </tr>
+        <tr>
+          <signature-pad #client_signaturePad [options]="signaturePadOptions"></signature-pad>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>

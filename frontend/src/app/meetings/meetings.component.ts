@@ -28,6 +28,9 @@ export class MeetingsComponent {
       .subscribe(res => {
           this.meetingsList = res;
           this.dataSource = new MatTableDataSource(res);
+          this.dataSource.filterPredicate = function(data, filter: string): boolean {
+            return data.subject.toLowerCase().includes(filter) || data.consultant.toLowerCase().includes(filter);
+          };
         },
         console.error
       );
@@ -37,7 +40,7 @@ export class MeetingsComponent {
     this.meetingsListSubs.unsubscribe();
   }
 
-  displayedColumns: string[] = ['date','time','subject','consultant', 'edit', 'delete'];
+  displayedColumns: string[] = ['date','time','subject','consultant', 'edit', 'delete', 'view'];
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();

@@ -25,6 +25,9 @@ export class ClientsComponent implements OnInit, OnDestroy {
       .subscribe(res => {
           this.clientsList = res;
           this.dataSource = new MatTableDataSource(res);
+          this.dataSource.filterPredicate = function(data, filter: string): boolean {
+            return data.name.toLowerCase().includes(filter) || data.city.toLowerCase().includes(filter);
+          };
         },
         console.error
       );

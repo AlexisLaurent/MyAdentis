@@ -14,6 +14,7 @@ import {ProjectsApiService} from './projects/projects-api.service';
 import {MeetingsComponent} from './meetings/meetings.component';
 import {MeetingAddFormComponent} from './meetings/meeting-add-form.component';
 import {MeetingEditFormComponent} from './meetings/meeting-edit-form.component';
+import {MeetingViewFormComponent} from './meetings/meeting-view-form.component';
 
 import {ClientsComponent} from './clients/clients.component';
 import {ClientAddFormComponent} from './clients/client-add-form.component';
@@ -54,6 +55,7 @@ const appRoutes: Routes = [
   { path: 'meetings', component: MeetingsComponent },
   { path: 'new-meeting', component: MeetingAddFormComponent },
   { path: 'edit-meeting/:id', component: MeetingEditFormComponent },
+  { path: 'view-meeting/:id', component: MeetingViewFormComponent },
   { path: 'consultants', component: ConsultantsComponent },
   { path: 'new-consultant/:id', component: ConsultantAddFormComponent },
   { path: 'edit-consultant/:id', component: ConsultantEditFormComponent },
@@ -76,6 +78,7 @@ const appRoutes: Routes = [
     MeetingsComponent,
     MeetingAddFormComponent,
     MeetingEditFormComponent,
+    MeetingViewFormComponent,
     ConsultantsComponent,
     ConsultantAddFormComponent,
     ConsultantEditFormComponent,

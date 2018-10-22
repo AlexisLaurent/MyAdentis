@@ -11,8 +11,8 @@ import {ClientsApiService} from '../clients/clients-api.service';
 import {ClientEmployee} from '../clientEmployees/clientEmployee.model';
 import {ClientEmployeesApiService} from '../clientEmployees/clientEmployees-api.service';
 import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {concatMap, tap} from 'rxjs/operators';
+import {Subscription, forkJoin} from 'rxjs';
+import {concatMap, tap, mergeMap, map} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material';
 
 @Component({
@@ -34,19 +34,16 @@ export class ProjectEditFormComponent implements OnInit {
   consultant: Consultant;
   consultantsListSubs: Subscription;
   consultantsList: Consultant[];
-  consultantControl = new FormControl('');
   consultantForm: FormGroup;
 
   client: Client;
   clientsListSubs: Subscription;
   clientsList: Client[];
-  clientControl = new FormControl('');
   clientForm: FormGroup;
 
   clientEmployee: ClientEmployee;
   clientEmployeesListSubs: Subscription;
   clientEmployeesList: ClientEmployee[];
-  clientEmployeeControl = new FormControl('');
   clientEmployeeForm: FormGroup;
 
   constructor(private projectsApi: ProjectsApiService, private consultantsApi: ConsultantsApiService, private clientsApi: ClientsApiService, private clientEmployeesApi: ClientEmployeesApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) { }
@@ -56,6 +53,9 @@ export class ProjectEditFormComponent implements OnInit {
     this.projectId = parseInt(this.activatedRoute.snapshot.params["id"]);
 
     this.projectForm = this.formBuilder.group({
+      consultantControl: ['', Validators.required],
+      clientControl: ['', Validators.required],
+      clientEmployeeControl: ['', Validators.required],
       start_date: ['', Validators.required],
       end_date: ['', Validators.required],
     });
@@ -82,75 +82,71 @@ export class ProjectEditFormComponent implements OnInit {
       title: [{value: '', disabled: true}, Validators.required],
     });
 
-    this.projectsListSubs = this.projectsApi
-      .getDetailedProject(this.projectId)
-      .subscribe(res => {
-          this.manager = res.manager[0];
-          this.consultant = res.consultant[0];
-          this.client = res.client[0];
-          this.clientEmployee = res.clientEmployee[0];
+    this.projectsListSubs = this.projectsApi.getDetailedProject(this.projectId)
+    .pipe(
+      mergeMap(project => 
+        forkJoin(
+          this.consultantsApi.getConsultants(),
+          this.clientsApi.getClients(),
+          this.clientEmployeesApi.getClientEmployeesForClient(project.client[0].id)
+        )
+        .pipe(map(res => ({project, consultants: res[0], clients: res[1], clientEmployees: res[2] })))
+      )
+    )
+    .subscribe(res => {
+      this.consultantsList = res.consultants;
+      this.clientsList = res.clients;
+      this.clientEmployeesList = res.clientEmployees;
 
-          this.projectForm.setValue({
-            start_date: new Date(res.start_date),
-            end_date: new Date(res.end_date),
-          });
+      this.manager = res.project.manager[0];
+      this.consultant = res.project.consultant[0];
+      this.client = res.project.client[0];
+      this.clientEmployee = res.project.clientEmployee[0];
 
-          this.consultantForm.setValue({
-            firstName: this.consultant.firstName,
-            lastName: this.consultant.lastName,
-            email: this.consultant.email,
-            tel: this.consultant.tel,
-          });
+      this.projectForm.setValue({
+        consultantControl: this.consultant,
+        clientControl: this.client,
+        clientEmployeeControl: this.clientEmployee,
+        start_date: new Date(res.project.start_date),
+        end_date: new Date(res.project.end_date),
+      });
 
-          this.clientForm.setValue({
-            name: this.client.name,
-            address: this.client.address,
-            cp: this.client.cp,
-            city: this.client.city,
-          });
+      this.consultantForm.setValue({
+        firstName: this.consultant.firstName,
+        lastName: this.consultant.lastName,
+        email: this.consultant.email,
+        tel: this.consultant.tel,
+      });
 
-          this.clientEmployeeForm.setValue({
-            firstName: this.clientEmployee.firstName,
-            lastName: this.clientEmployee.lastName,
-            email: this.clientEmployee.email,
-            tel: this.clientEmployee.tel,
-            title: this.clientEmployee.title,
-          });
-        },
-        console.error
-      );
+      this.clientForm.setValue({
+        name: this.client.name,
+        address: this.client.address,
+        cp: this.client.cp,
+        city: this.client.city,
+      });
 
-    this.consultantsListSubs = this.consultantsApi
-      .getConsultants()
-      .subscribe(res => {
-          this.consultantsList = res;
-        },
-        console.error
-      );
+      this.clientEmployeeForm.setValue({
+        firstName: this.clientEmployee.firstName,
+        lastName: this.clientEmployee.lastName,
+        email: this.clientEmployee.email,
+        tel: this.clientEmployee.tel,
+        title: this.clientEmployee.title,
+      });
+    },
+      console.error
+    );
+  }
 
-    this.clientsListSubs = this.clientsApi
-      .getClients()
-      .subscribe(res => {
-          this.clientsList = res;
-        },
-        console.error
-      );
-
-    this.clientsListSubs = this.clientsApi
-      .getClients()
-      .subscribe(res => {
-          this.clientsList = res;
-        },
-        console.error
-      );
+  compareObjects(o1: any, o2: any): boolean {
+    return o1.id === o2.id;
   }
 
   updateProject() {
     this.project.id = this.projectId;
     this.project.manager_id = this.manager.id;
-    this.project.consultant_id = this.consultantControl.value.id === undefined ? this.consultant.id : this.consultantControl.value.id;
-    this.project.client_id = this.clientControl.value.id === undefined ? this.client.id : this.clientControl.value.id;
-    this.project.clientEmployee_id = this.clientEmployeeControl.value.id === undefined ? this.clientEmployee.id : this.clientEmployeeControl.value.id;
+    this.project.consultant_id = this.projectForm.get('consultantControl').value.id === undefined ? this.consultant.id : this.projectForm.get('consultantControl').value.id;
+    this.project.client_id = this.projectForm.get('clientControl').value.id === undefined ? this.client.id : this.projectForm.get('clientControl').value.id;
+    this.project.clientEmployee_id = this.projectForm.get('clientEmployeeControl').value.id === undefined ? this.clientEmployee.id : this.projectForm.get('clientEmployeeControl').value.id;
     this.project.start_date = this.projectForm.get('start_date').value;
     this.project.end_date = this.projectForm.get('end_date').value;
 
@@ -163,15 +159,22 @@ export class ProjectEditFormComponent implements OnInit {
   }
 
   updateClientEmployeeList(client) {
-     this.clientEmployeesListSubs = this.clientEmployeesApi
-      .getClientEmployeesForClient(client.id)
-      .subscribe(res => {
-          this.clientEmployeesList = res;
-        },
-        console.error
-      );
+   this.clientEmployeesListSubs = this.clientEmployeesApi
+    .getClientEmployeesForClient(client.id)
+    .subscribe(res => {
+        this.clientEmployeesList = res;
+        this.clientEmployeeForm.setValue({
+          firstName: '',
+          lastName: '',
+          email: '',
+          tel: '',
+          title: '',
+        });
+        this.projectForm.controls['clientEmployeeControl'].setValue(null);
+      },
+      console.error
+    );
   }
-
 }
 
 export class DetailedProject {

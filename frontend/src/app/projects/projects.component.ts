@@ -31,6 +31,11 @@ export class ProjectsComponent {
       .subscribe(res => {
           this.projectsList = res;
           this.dataSource = new MatTableDataSource(res);
+          this.dataSource.filterPredicate = function(data, filter: string): boolean {
+            return data.consultant[0].lastName.toLowerCase().includes(filter) || data.consultant[0].firstName.toLowerCase().includes(filter) ||
+                   data.clientEmployee[0].lastName.toLowerCase().includes(filter) || data.clientEmployee[0].firstName.toLowerCase().includes(filter) ||
+                   data.client[0].name.toLowerCase().includes(filter);
+          };
         },
         console.error
       );

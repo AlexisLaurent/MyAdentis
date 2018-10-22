@@ -2,7 +2,7 @@
 <div class="meetings">
 
   <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrer l'Ordre du jour et le Consultant">
   </mat-form-field>
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -41,6 +41,15 @@
       <td mat-cell *matCellDef="let element"> 
         <button mat-fab color="primary" class="delete-meeting" (click)="deleteMeeting(element.id)">
           <i class="material-icons">delete</i>
+        </button> 
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="view">
+      <th mat-header-cell *matHeaderCellDef> Visualiser </th>
+      <td mat-cell *matCellDef="let element"> 
+        <button mat-fab color="primary" class="view-meeting" routerLink="/view-meeting/{{element.id}}">
+          <i class="material-icons">search</i>
         </button> 
       </td>
     </ng-container>

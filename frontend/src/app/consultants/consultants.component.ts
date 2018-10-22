@@ -23,6 +23,9 @@ export class ConsultantsComponent {
       .subscribe(res => {
           this.consultantsList = res;
           this.dataSource = new MatTableDataSource(res);
+          this.dataSource.filterPredicate = function(data, filter: string): boolean {
+            return data.firstName.toLowerCase().includes(filter) || data.lastName.toLowerCase().includes(filter);
+          };
         },
         console.error
       );

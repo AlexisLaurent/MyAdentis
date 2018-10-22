@@ -82,20 +82,20 @@ export class MeetingAddFormComponent implements OnInit {
       date: [this.meeting.date, Validators.required],
       time: [this.meeting.time, Validators.required],
       subject: [this.meeting.subject, Validators.required],
-      project_bilan1: [this.meeting.project_bilan1, Validators.required],
-      project_bilan2: [this.meeting.project_bilan2, Validators.required],
-      adentis_bilan1: [this.meeting.adentis_bilan1, Validators.required],
-      adentis_bilan2: [this.meeting.adentis_bilan2, Validators.required],
-      adentis_bilan3: [this.meeting.adentis_bilan3, Validators.required],
-      manager_signature: [this.meeting.manager_signature, Validators.required],
-      consultant_signature: [this.meeting.consultant_signature, Validators.required],
-      client_signature: [this.meeting.client_signature, Validators.required],
+      project_bilan1: [this.meeting.project_bilan1],
+      project_bilan2: [this.meeting.project_bilan2],
+      adentis_bilan1: [this.meeting.adentis_bilan1],
+      adentis_bilan2: [this.meeting.adentis_bilan2],
+      adentis_bilan3: [this.meeting.adentis_bilan3],
+      manager_signature: [this.meeting.manager_signature],
+      consultant_signature: [this.meeting.consultant_signature],
+      client_signature: [this.meeting.client_signature],
     });
 
     this.nextMeetingForm = this.formBuilder.group({
-      date: [this.nextMeeting.date, Validators.required],
-      time: [this.nextMeeting.time, Validators.required],
-      subject: [this.nextMeeting.subject, Validators.required],
+      date: [this.nextMeeting.date],
+      time: [this.nextMeeting.time],
+      subject: [this.nextMeeting.subject],
     });
   }
 
@@ -175,7 +175,7 @@ export class MeetingAddFormComponent implements OnInit {
         error => alert(error.message)
       );
 
-    if (this.meeting.subject == "PAP" && this.nextMeeting.date != null){
+    if (this.meeting.subject == "PAP" && this.nextMeeting.subject != "" && this.nextMeeting.subject != undefined){
       this.nextMeeting.project_id = this.meeting.project_id;
       this.meetingsApi
       .saveMeeting(this.nextMeeting)

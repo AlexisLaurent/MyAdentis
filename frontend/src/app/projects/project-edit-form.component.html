@@ -6,7 +6,7 @@
       <tr>    
         <td>
           <mat-form-field>
-            <mat-select placeholder="Mes Consultants" [formControl]="consultantControl" >
+            <mat-select placeholder="Mes Consultants" [compareWith]="compareObjects" formControlName="consultantControl" >
               <mat-option *ngFor="let consultant of consultantsList" [value]="consultant">
                 {{consultant.lastName}} {{consultant.firstName}}
               </mat-option>
@@ -17,29 +17,29 @@
       <tr [formGroup]="consultantForm">
         <td>
           <mat-form-field>
-            <input matInput placeholder="Nom" formControlName="lastName" value="{{consultantControl.value?.lastName}}" >
+            <input matInput placeholder="Nom" formControlName="lastName" value="{{projectForm.controls['consultantControl'].value?.lastName}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Prénom" formControlName="firstName" value="{{consultantControl.value?.firstName}}" >
+            <input matInput placeholder="Prénom" formControlName="firstName" value="{{projectForm.controls['consultantControl'].value?.firstName}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Email" formControlName="email" value="{{consultantControl.value?.email}}" >
+            <input matInput placeholder="Email" formControlName="email" value="{{projectForm.controls['consultantControl'].value?.email}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Téléphone" formControlName="tel" value="{{consultantControl.value?.tel}}" >
+            <input matInput placeholder="Téléphone" formControlName="tel" value="{{projectForm.controls['consultantControl'].value?.tel}}" >
           </mat-form-field>
         </td>
       </tr>
       <tr>    
         <td>
           <mat-form-field>
-            <mat-select placeholder="Mes Clients" [formControl]="clientControl" (selectionChange)="updateClientEmployeeList($event.value)">
+            <mat-select placeholder="Mes Clients" [compareWith]="compareObjects" formControlName="clientControl" (selectionChange)="updateClientEmployeeList($event.value)">
               <mat-option *ngFor="let client of clientsList" [value]="client">
                 {{client.name}}, {{client.address}} - {{client.city}}
               </mat-option>
@@ -50,29 +50,29 @@
       <tr [formGroup]="clientForm">
         <td>
           <mat-form-field>
-            <input matInput placeholder="Nom" formControlName="name" value="{{clientControl.value?.name}}" >
+            <input matInput placeholder="Nom" formControlName="name" value="{{projectForm.controls['clientControl'].value?.name}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Adresse" formControlName="address" value="{{clientControl.value?.address}}" >
+            <input matInput placeholder="Adresse" formControlName="address" value="{{projectForm.controls['clientControl'].value?.address}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Code Postal" formControlName="cp" value="{{clientControl.value?.cp}}" >
+            <input matInput placeholder="Code Postal" formControlName="cp" value="{{projectForm.controls['clientControl'].value?.cp}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Ville" formControlName="city" value="{{clientControl.value?.city}}" >
+            <input matInput placeholder="Ville" formControlName="city" value="{{projectForm.controls['clientControl'].value?.city}}" >
           </mat-form-field>
         </td>
       </tr>
       <tr>    
         <td>
           <mat-form-field>
-            <mat-select placeholder="Responsable Projet" [formControl]="clientEmployeeControl">
+            <mat-select placeholder="Responsable Projet" [compareWith]="compareObjects" formControlName="clientEmployeeControl">
               <mat-option *ngFor="let clientEmployee of clientEmployeesList" [value]="clientEmployee">
                 {{clientEmployee.lastName}} {{clientEmployee.firstName}} - {{clientEmployee.title}}
               </mat-option>
@@ -83,27 +83,27 @@
       <tr [formGroup]="clientEmployeeForm">
         <td>
           <mat-form-field>
-            <input matInput placeholder="Nom" formControlName="lastName" value="{{clientEmployeeControl.value?.lastName}}" >
+            <input matInput placeholder="Nom" formControlName="lastName" value="{{projectForm.controls['clientEmployeeControl'].value?.lastName}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Prénom" formControlName="firstName" value="{{clientEmployeeControl.value?.firstName}}" >
+            <input matInput placeholder="Prénom" formControlName="firstName" value="{{projectForm.controls['clientEmployeeControl'].value?.firstName}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Email" formControlName="email" value="{{clientEmployeeControl.value?.email}}" >
+            <input matInput placeholder="Email" formControlName="email" value="{{projectForm.controls['clientEmployeeControl'].value?.email}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Téléphone" formControlName="tel" value="{{clientEmployeeControl.value?.tel}}" >
+            <input matInput placeholder="Téléphone" formControlName="tel" value="{{projectForm.controls['clientEmployeeControl'].value?.tel}}" >
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Poste" formControlName="title" value="{{clientEmployeeControl.value?.title}}" >
+            <input matInput placeholder="Poste" formControlName="title" value="{{projectForm.controls['clientEmployeeControl'].value?.title}}" >
           </mat-form-field>
         </td>
       </tr>
