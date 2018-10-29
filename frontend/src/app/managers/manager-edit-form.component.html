@@ -7,6 +7,7 @@
         <td>
           <mat-form-field>
             <input matInput id="firstName" formControlName="firstName"  placeholder="Prénom">
+            <mat-error>Vous devez entrer un prénom valide.</mat-error>
           </mat-form-field>
         </td>
       </tr>
@@ -14,20 +15,23 @@
         <td>    
           <mat-form-field>
             <input matInput id="lastName" formControlName="lastName"  placeholder="Nom">
+            <mat-error>Vous devez entrer un nom valide.</mat-error>
           </mat-form-field>
         </td>
       </tr>
       <tr>  
         <td>    
           <mat-form-field>
-            <input matInput id="email" formControlName="email"  placeholder="Email">
+            <input matInput id="email" formControlName="email"  placeholder="Email (Ex : email@example.com)" email>
+            <mat-error>Vous devez entrer une adresse mail valide.</mat-error>
           </mat-form-field>
         </td>
       </tr>
       <tr>  
         <td>    
           <mat-form-field>
-            <input matInput id="tel" formControlName="tel" placeholder="Téléphone">
+            <input matInput id="tel" formControlName="tel" placeholder="Téléphone (Ex : 06 00 00 00 00)">
+            <mat-error>Vous devez entrer un numéro de téléphone valide.</mat-error>
           </mat-form-field>
         </td>
       </tr>

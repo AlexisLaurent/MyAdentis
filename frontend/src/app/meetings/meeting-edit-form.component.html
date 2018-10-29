@@ -5,10 +5,10 @@
     <mat-step [stepControl]="commande">
       <h3>Adentis</h3>
       <table>
-        <tr>
+        <tr [formGroup]="projectForm">
           <td>
             <mat-form-field>
-              <mat-select placeholder="Mes Projets" [formControl]="projectControl" (selectionChange)="onProjectChanged($event.value)">
+              <mat-select placeholder="Mes Projets" [compareWith]="compareObjects" formControlName="projectControl" (selectionChange)="onProjectChanged($event.value)">
                 <mat-option *ngFor="let project of projectsList" [value]="project">
                   {{project.consultant[0].lastName}} {{project.consultant[0].firstName}} - {{project.client[0].name}}
                 </mat-option>
@@ -101,7 +101,7 @@
         </tr>
       </table>
       <h3>Date Commande</h3>
-      <table [formGroup]="projectDateForm" >
+      <table [formGroup]="projectForm" >
         <tr>
           <h4>Début</h4>
         </tr>

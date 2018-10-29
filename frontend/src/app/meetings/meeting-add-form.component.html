@@ -1,18 +1,19 @@
 <div>
   <h2>Nouvelle Réunion</h2>
 
-  <mat-horizontal-stepper [linear]="false" #stepper>
+  <mat-horizontal-stepper [linear]="true" #stepper>
     <mat-step [stepControl]="commande">
       <h3>Adentis</h3>
       <table>
-        <tr>
+        <tr [formGroup]="projectForm">
           <td>
             <mat-form-field>
-              <mat-select placeholder="Mes Projets" [formControl]="projectControl" (selectionChange)="onProjectChanged($event.value)">
+              <mat-select placeholder="Mes Projets" formControlName="projectControl" (selectionChange)="onProjectChanged($event.value)">
                 <mat-option *ngFor="let project of projectsList" [value]="project">
                   {{project.consultant[0].lastName}} {{project.consultant[0].firstName}} - {{project.client[0].name}}
                 </mat-option>
               </mat-select>
+              <mat-error>Vous devez selectionner un projet.</mat-error>
             </mat-form-field>
           </td>
         </tr>
@@ -101,7 +102,7 @@
         </tr>
       </table>
       <h3>Date Commande</h3>
-      <table [formGroup]="projectDateForm" >
+      <table [formGroup]="projectForm" >
         <tr>
           <h4>Début</h4>
         </tr>
@@ -143,13 +144,17 @@
           <tr>
             <td>
               <mat-form-field>
-                <input matInput [matDatepicker]="dateReu" placeholder="Choissiez une date" formControlName="date" [(ngModel)]="meeting.date" [value]="current_date.value" >
+                <input matInput [matDatepicker]="dateReu" placeholder="Choissiez une date" formControlName="date" [(ngModel)]="meeting.date" [value]="current_date" >
                 <mat-datepicker-toggle matSuffix [for]="dateReu"></mat-datepicker-toggle>
                 <mat-datepicker #dateReu></mat-datepicker>
+                <mat-error>Vous devez selectionner une date pour la réunion.</mat-error>
               </mat-form-field>
             </td>
             <td>
-              <input type="time" atp-time-picker formControlName="time" locale='fr' [(ngModel)]="meeting.time" value="12:00"/>
+              <mat-form-field>
+                <input matInput type="time" atp-time-picker formControlName="time" locale='fr' [(ngModel)]="meeting.time" value="12:00"/>
+                <mat-error>Vous devez selectionner une heure pour la réunion.</mat-error>
+              </mat-form-field>
             </td>
           </tr>
           <tr>
@@ -165,6 +170,7 @@
                   <mat-option value="PAP">PAP</mat-option>
                   <mat-option value="Bilan de mission">Bilan de mission</mat-option>
                 </mat-select>
+                <mat-error>Vous devez préciser l'odre du jour de la réunion.</mat-error>
               </mat-form-field>
             </td>
           </tr>

@@ -391,15 +391,20 @@ def get_detailedMeeting(id):
     session = Session()
     meeting_object = session.query(Meeting).get(id)
 
+    project = session.query(Project).get(meeting_object.project_id)
+
+    detailedProject = {}
+    detailedProject["id"] = project.id;
+    detailedProject["consultant"] = ConsultantSchema().dump(session.query(Consultant).get(project.consultant_id))
+    detailedProject["manager"] = ManagerSchema().dump(session.query(Manager).get(project.manager_id))
+    detailedProject["client"] = ClientSchema().dump(session.query(Client).get(project.client_id))
+    detailedProject["clientEmployee"] = ClientEmployeeSchema().dump(session.query(ClientEmployee).get(project.clientEmployee_id))
+    detailedProject["start_date"] = project.start_date
+    detailedProject["end_date"] = project.end_date
+
     detailedMeeting = {}
     detailedMeeting["id"] = meeting_object.id;
-    detailedMeeting["project_id"] = meeting_object.project_id;
-    project = session.query(Project).get(meeting_object.project_id)
-    detailedMeeting["consultant"] = ConsultantSchema().dump(session.query(Consultant).get(project.consultant_id))
-    detailedMeeting["client"] = ClientSchema().dump(session.query(Client).get(project.client_id))
-    detailedMeeting["clientEmployee"] = ClientEmployeeSchema().dump(session.query(ClientEmployee).get(project.clientEmployee_id))
-    detailedMeeting["start_date"] = project.start_date
-    detailedMeeting["end_date"] = project.end_date
+    detailedMeeting["detailedProject"] = detailedProject
     detailedMeeting["date"] = meeting_object.date
     detailedMeeting["time"] = meeting_object.time
     detailedMeeting["subject"] = meeting_object.subject

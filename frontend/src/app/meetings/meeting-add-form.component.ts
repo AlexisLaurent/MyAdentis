@@ -32,16 +32,18 @@ export class MeetingAddFormComponent implements OnInit {
 
   projectsListSubs: Subscription;
   projectsList: DetailedProject[];
-  projectControl = new FormControl('');
 
   consultantForm: FormGroup;
   clientForm: FormGroup;
   clientEmployeeForm: FormGroup;
-  projectDateForm: FormGroup;
+  projectForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,private meetingsApi: MeetingsApiService,private projectsApi: ProjectsApiService, private atp: AmazingTimePickerService, private router: Router, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
+
+    this.meeting.date = new Date();
+    this.nextMeeting.date = new Date();
 
     this.projectsListSubs = this.projectsApi
       .getDetailedProjects()
@@ -73,7 +75,8 @@ export class MeetingAddFormComponent implements OnInit {
       title: [{value: '', disabled: true}, Validators.required],
     });
 
-    this.projectDateForm = this.formBuilder.group({
+    this.projectForm = this.formBuilder.group({
+      projectControl: ['', Validators.required],
       start_date: [{value: '', disabled: true}, Validators.required],
       end_date: [{value: '', disabled: true}, Validators.required],
     });
@@ -124,13 +127,14 @@ export class MeetingAddFormComponent implements OnInit {
       title: project.clientEmployee[0].title,
     });
 
-    this.projectDateForm = this.formBuilder.group({
+    this.projectForm = this.formBuilder.group({
+      projectControl: project,
       start_date: new Date(project.start_date),
       end_date: new Date(project.end_date),
     });
   }
 
-  current_date = new FormControl(new Date());
+  current_date = new Date();
 
   open() {
     const amazingTimePicker = this.atp.open();

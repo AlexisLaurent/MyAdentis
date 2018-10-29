@@ -6,104 +6,107 @@
       <tr>    
         <td>
           <mat-form-field>
-            <mat-select placeholder="Mes Consultants" [formControl]="consultantControl">
+            <mat-select placeholder="Mes Consultants" formControlName="consultantControl">
               <mat-option *ngFor="let consultant of consultantsList" [value]="consultant">
                 {{consultant.lastName}} {{consultant.firstName}}
               </mat-option>
             </mat-select>
+            <mat-error>Vous devez selectionner un consultant.</mat-error>
           </mat-form-field>
         </td>
       </tr>
       <tr>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Nom" value="{{consultantControl.value?.lastName}}" disabled>
+            <input matInput placeholder="Nom" value="{{projectForm.get('consultantControl').value?.lastName}}" disabled>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Prénom" value="{{consultantControl.value?.firstName}}" disabled>
+            <input matInput placeholder="Prénom" value="{{projectForm.get('consultantControl').value?.firstName}}" disabled>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Email" value="{{consultantControl.value?.email}}" disabled>
+            <input matInput placeholder="Email" value="{{projectForm.get('consultantControl').value?.email}}" disabled>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Téléphone" value="{{consultantControl.value?.tel}}" disabled>
+            <input matInput placeholder="Téléphone" value="{{projectForm.get('consultantControl').value?.tel}}" disabled>
           </mat-form-field>
         </td>
       </tr>
       <tr>    
         <td>
           <mat-form-field>
-            <mat-select placeholder="Mes Clients" [formControl]="clientControl" (selectionChange)="updateClientEmployeeList($event.value)">
+            <mat-select placeholder="Mes Clients" formControlName="clientControl" (selectionChange)="updateClientEmployeeList($event.value)">
               <mat-option *ngFor="let client of clientsList" [value]="client">
                 {{client.name}}, {{client.address}} - {{client.city}}
               </mat-option>
             </mat-select>
+            <mat-error>Vous devez selectionner un client.</mat-error>
           </mat-form-field>
         </td>
       </tr>
       <tr>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Nom" value="{{clientControl.value?.name}}" disabled>
+            <input matInput placeholder="Nom" value="{{projectForm.get('clientControl').value?.name}}" disabled>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Adresse" value="{{clientControl.value?.address}}" disabled>
+            <input matInput placeholder="Adresse" value="{{projectForm.get('clientControl').value?.address}}" disabled>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Code Postal" value="{{clientControl.value?.cp}}" disabled>
+            <input matInput placeholder="Code Postal" value="{{projectForm.get('clientControl').value?.cp}}" disabled>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Ville" value="{{clientControl.value?.city}}" disabled>
+            <input matInput placeholder="Ville" value="{{projectForm.get('clientControl').value?.city}}" disabled>
           </mat-form-field>
         </td>
       </tr>
       <tr>    
         <td>
           <mat-form-field>
-            <mat-select placeholder="Responsable Projet" [formControl]="clientEmployeeControl">
+            <mat-select placeholder="Responsable Projet" formControlName="clientEmployeeControl">
               <mat-option *ngFor="let clientEmployee of clientEmployeesList" [value]="clientEmployee">
                 {{clientEmployee.lastName}} {{clientEmployee.firstName}} - {{clientEmployee.title}}
               </mat-option>
             </mat-select>
+            <mat-error>Vous devez selectionner un responsable projet.</mat-error>
           </mat-form-field>
         </td>
       </tr>
       <tr>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Nom" value="{{clientEmployeeControl.value?.lastName}}" disabled>
+            <input matInput placeholder="Nom" value="{{projectForm.get('clientEmployeeControl').value?.lastName}}" disabled>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Prénom" value="{{clientEmployeeControl.value?.firstName}}" disabled>
+            <input matInput placeholder="Prénom" value="{{projectForm.get('clientEmployeeControl').value?.firstName}}" disabled>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Email" value="{{clientEmployeeControl.value?.email}}" disabled>
+            <input matInput placeholder="Email" value="{{projectForm.get('clientEmployeeControl').value?.email}}" disabled>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Téléphone" value="{{clientEmployeeControl.value?.tel}}" disabled>
+            <input matInput placeholder="Téléphone" value="{{projectForm.get('clientEmployeeControl').value?.tel}}" disabled>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field>
-            <input matInput placeholder="Poste" value="{{clientEmployeeControl.value?.title}}" disabled>
+            <input matInput placeholder="Poste" value="{{projectForm.get('clientEmployeeControl').value?.title}}" disabled>
           </mat-form-field>
         </td>
       </tr>

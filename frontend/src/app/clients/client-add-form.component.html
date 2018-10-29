@@ -7,6 +7,7 @@
         <td>
           <mat-form-field>
             <input matInput id="name" formControlName="name" [(ngModel)]="client.name" placeholder="Nom">
+            <mat-error>Vous devez entrer un nom valide.</mat-error>
           </mat-form-field>
         </td>
       </tr>
@@ -14,6 +15,7 @@
         <td>    
           <mat-form-field>
             <input matInput id="address" formControlName="address" [(ngModel)]="client.address" placeholder="Adresse">
+            <mat-error>Vous devez entrer une adresse valide.</mat-error>
           </mat-form-field>
         </td>
       </tr>
@@ -21,6 +23,7 @@
         <td>    
           <mat-form-field>
             <input matInput id="cp" formControlName="cp" [(ngModel)]="client.cp" placeholder="Code Postal">
+            <mat-error>Vous devez entrer un code postal valide.</mat-error>
           </mat-form-field>
         </td>
       </tr>
@@ -28,6 +31,7 @@
         <td>    
           <mat-form-field>
             <input matInput id="city" formControlName="city" [(ngModel)]="client.city" placeholder="Ville">
+            <mat-error>Vous devez entrer une ville valide.</mat-error>
           </mat-form-field>
         </td>
       </tr>
