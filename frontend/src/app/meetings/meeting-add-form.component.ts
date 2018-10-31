@@ -16,6 +16,7 @@ import {Client} from '../clients/client.model';
 import {ClientsApiService} from '../clients/clients-api.service';
 import {ClientEmployee} from '../clientEmployees/clientEmployee.model';
 import {ClientEmployeesApiService} from '../clientEmployees/clientEmployees-api.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'meeting-add-form',
@@ -38,7 +39,7 @@ export class MeetingAddFormComponent implements OnInit {
   clientEmployeeForm: FormGroup;
   projectForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,private meetingsApi: MeetingsApiService,private projectsApi: ProjectsApiService, private atp: AmazingTimePickerService, private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(private formBuilder: FormBuilder,private meetingsApi: MeetingsApiService,private projectsApi: ProjectsApiService, private atp: AmazingTimePickerService, private router: Router, private activatedRoute: ActivatedRoute, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
 
@@ -172,21 +173,25 @@ export class MeetingAddFormComponent implements OnInit {
   }
 
   saveMeeting(){
-    this.meetingsApi
-      .saveMeeting(this.meeting)
-      .subscribe(
-        () => this.router.navigate(['/meetings']),
-        error => alert(error.message)
-      );
-
-    if (this.meeting.subject == "PAP" && this.nextMeeting.subject != "" && this.nextMeeting.subject != undefined){
-      this.nextMeeting.project_id = this.meeting.project_id;
+    if (this.meeting.project_id != undefined && this.meeting.time != undefined && this.meeting.subject != undefined ) {
       this.meetingsApi
-      .saveMeeting(this.nextMeeting)
-      .subscribe(
-        () => this.router.navigate(['/meetings']),
-        error => alert(error.message)
-      );
+        .saveMeeting(this.meeting)
+        .subscribe(
+          () => this.router.navigate(['/meetings']),
+          error => alert(error.message)
+        );
+
+      if (this.meeting.subject == "PAP" && this.nextMeeting.subject != "" && this.nextMeeting.subject != undefined){
+        this.nextMeeting.project_id = this.meeting.project_id;
+        this.meetingsApi
+        .saveMeeting(this.nextMeeting)
+        .subscribe(
+          () => this.router.navigate(['/meetings']),
+          error => alert(error.message)
+        );
+      }
+    } else {
+      this.snackBar.open("Des champs requis sont manquants. Vous devez au moins spécifier un projet (étape 1) et la date, l'heure et l'ordre du jour (étape 2) pour créer une réunion.", "Fermer");
     }
   }
 }

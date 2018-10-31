@@ -12,7 +12,6 @@ import {ManagersApiService} from './managers-api.service';
 
 export class ManagersComponent {
   managersListSubs: Subscription;
-  managersList: Manager[];
   dataSource: MatTableDataSource<Manager>;
 
   constructor(private managersApi: ManagersApiService) { }
@@ -21,7 +20,6 @@ export class ManagersComponent {
     this.managersListSubs = this.managersApi
       .getManagers()
       .subscribe(res => {
-          this.managersList = res;
           this.dataSource = new MatTableDataSource(res);
           this.dataSource.filterPredicate = function(data, filter: string): boolean {
             return data.firstName.toLowerCase().includes(filter) || data.lastName.toLowerCase().includes(filter);
@@ -44,8 +42,13 @@ export class ManagersComponent {
   deleteManager(id) {
     this.managersApi
       .deleteManager(id)
-      .subscribe(
-        err => console.log(err)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(res);
+          this.dataSource.filterPredicate = function(data, filter: string): boolean {
+            return data.firstName.toLowerCase().includes(filter) || data.lastName.toLowerCase().includes(filter);
+          };
+        },
+        console.error
       );
   }
 }

@@ -17,7 +17,6 @@ import {Manager} from '../managers/manager.model';
 
 export class ProjectsComponent {
   projectsListSubs: Subscription;
-  projectsList: Project[];
 
   project = new DetailedProject();
   dataList = new Array<DetailedProject>();
@@ -29,7 +28,6 @@ export class ProjectsComponent {
     this.projectsListSubs = this.projectsApi
       .getDetailedProjects()
       .subscribe(res => {
-          this.projectsList = res;
           this.dataSource = new MatTableDataSource(res);
           this.dataSource.filterPredicate = function(data, filter: string): boolean {
             return data.consultant[0].lastName.toLowerCase().includes(filter) || data.consultant[0].firstName.toLowerCase().includes(filter) ||
@@ -54,8 +52,15 @@ export class ProjectsComponent {
   deleteProject(id) {
     this.projectsApi
       .deleteProject(id)
-      .subscribe(
-        err => console.log(err)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(res);
+          this.dataSource.filterPredicate = function(data, filter: string): boolean {
+            return data.consultant[0].lastName.toLowerCase().includes(filter) || data.consultant[0].firstName.toLowerCase().includes(filter) ||
+                   data.clientEmployee[0].lastName.toLowerCase().includes(filter) || data.clientEmployee[0].firstName.toLowerCase().includes(filter) ||
+                   data.client[0].name.toLowerCase().includes(filter);
+          };
+        },
+        console.error
       );
   }
 }

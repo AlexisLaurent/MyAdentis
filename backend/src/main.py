@@ -92,8 +92,16 @@ def delete_client(id):
 
     session.delete(client_object)
     session.commit()
+
+    client_objects = session.query(Client).all()
+
+    # transforming into JSON-serializable objects
+    schema = ClientSchema(many=True)
+    clients = schema.dump(client_objects)
+
+    # serializing as JSON
     session.close()
-    return '201'
+    return jsonify(clients.data)
 
 # CLIENT EMPLOYEE
 @app.route('/clientEmployees')
@@ -171,10 +179,20 @@ def delete_clientEmployee(id):
     session = Session()
     clientEmployee_object = session.query(ClientEmployee).get(id)
 
+    client_id = clientEmployee_object.client_id
+
     session.delete(clientEmployee_object)
     session.commit()
+
+    clientEmployee_objects = session.query(ClientEmployee).filter_by(client_id=client_id)
+
+    # transforming into JSON-serializable objects
+    schema = ClientEmployeeSchema(many=True)
+    clientEmployees = schema.dump(clientEmployee_objects)
+
+    # serializing as JSON
     session.close()
-    return '201'
+    return jsonify(clientEmployees.data)
 
 # CONSULTANT
 @app.route('/consultants')
@@ -252,10 +270,20 @@ def delete_consultant(id):
     session = Session()
     consultant_object = session.query(Consultant).get(id)
 
+    manager_id = consultant_object.manager_id
+
     session.delete(consultant_object)
     session.commit()
+
+    consultant_objects = session.query(Consultant).filter_by(manager_id=manager_id)
+
+    # transforming into JSON-serializable objects
+    schema = ConsultantSchema(many=True)
+    consultants = schema.dump(consultant_objects)
+
+    # serializing as JSON
     session.close()
-    return '201'
+    return jsonify(consultants.data)
 
 # MANAGER
 @app.route('/managers')
@@ -330,8 +358,17 @@ def delete_manager(id):
 
     session.delete(manager_object)
     session.commit()
+
+    manager_objects = session.query(Manager).all()
+
+    # transforming into JSON-serializable objects
+    schema = ManagerSchema(many=True)
+    managers = schema.dump(manager_objects)
+
+    # serializing as JSON
     session.close()
-    return '201'
+    return jsonify(managers.data)
+
 
 # MEETING
 @app.route('/meetings')
@@ -473,8 +510,25 @@ def delete_meeting(id):
 
     session.delete(meeting_object)
     session.commit()
+    
+    meeting_objects = session.query(Meeting).all()
+
+    simplifiedMeetings = []
+
+    for meeting in meeting_objects :
+        simplifiedMeeting = {}
+        simplifiedMeeting["id"] = meeting.id
+        simplifiedMeeting["date"] = meeting.date
+        simplifiedMeeting["time"] = meeting.time
+        simplifiedMeeting["subject"] = meeting.subject
+        project = session.query(Project).get(meeting.project_id)
+        consultant = session.query(Consultant).get(project.consultant_id)
+        simplifiedMeeting["consultant"] = consultant.lastName + " " + consultant.firstName
+        simplifiedMeetings.append(simplifiedMeeting)
+
+    # serializing as JSON
     session.close()
-    return '201'
+    return jsonify(simplifiedMeetings)
 
 # PROJECT
 @app.route('/projects')
@@ -594,5 +648,21 @@ def delete_project(id):
 
     session.delete(project_object)
     session.commit()
+    project_objects = session.query(Project).all()
+
+    detailedProjects = []
+
+    for project in project_objects :
+        detailedProject = {}
+        detailedProject["id"] = project.id;
+        detailedProject["consultant"] = ConsultantSchema().dump(session.query(Consultant).get(project.consultant_id))
+        detailedProject["manager"] = ManagerSchema().dump(session.query(Manager).get(project.manager_id))
+        detailedProject["client"] = ClientSchema().dump(session.query(Client).get(project.client_id))
+        detailedProject["clientEmployee"] =  ClientEmployeeSchema().dump(session.query(ClientEmployee).get(project.clientEmployee_id))
+        detailedProject["start_date"] = project.start_date
+        detailedProject["end_date"] = project.end_date
+        detailedProjects.append(detailedProject)
+
+    # serializing as JSON
     session.close()
-    return '201'
+    return jsonify(detailedProjects)

@@ -14,6 +14,7 @@ import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {Subscription, forkJoin} from 'rxjs';
 import {concatMap, tap, mergeMap, map} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'project-edit-form',
@@ -46,7 +47,7 @@ export class ProjectEditFormComponent implements OnInit {
   clientEmployeesList: ClientEmployee[];
   clientEmployeeForm: FormGroup;
 
-  constructor(private projectsApi: ProjectsApiService, private consultantsApi: ConsultantsApiService, private clientsApi: ClientsApiService, private clientEmployeesApi: ClientEmployeesApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private projectsApi: ProjectsApiService, private consultantsApi: ConsultantsApiService, private clientsApi: ClientsApiService, private clientEmployeesApi: ClientEmployeesApiService, private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
 
@@ -142,20 +143,24 @@ export class ProjectEditFormComponent implements OnInit {
   }
 
   updateProject() {
-    this.project.id = this.projectId;
-    this.project.manager_id = this.manager.id;
-    this.project.consultant_id = this.projectForm.get('consultantControl').value.id === undefined ? this.consultant.id : this.projectForm.get('consultantControl').value.id;
-    this.project.client_id = this.projectForm.get('clientControl').value.id === undefined ? this.client.id : this.projectForm.get('clientControl').value.id;
-    this.project.clientEmployee_id = this.projectForm.get('clientEmployeeControl').value.id === undefined ? this.clientEmployee.id : this.projectForm.get('clientEmployeeControl').value.id;
-    this.project.start_date = this.projectForm.get('start_date').value;
-    this.project.end_date = this.projectForm.get('end_date').value;
+    if(this.project.start_date < this.project.end_date){
+      this.project.id = this.projectId;
+      this.project.manager_id = this.manager.id;
+      this.project.consultant_id = this.projectForm.get('consultantControl').value.id === undefined ? this.consultant.id : this.projectForm.get('consultantControl').value.id;
+      this.project.client_id = this.projectForm.get('clientControl').value.id === undefined ? this.client.id : this.projectForm.get('clientControl').value.id;
+      this.project.clientEmployee_id = this.projectForm.get('clientEmployeeControl').value.id === undefined ? this.clientEmployee.id : this.projectForm.get('clientEmployeeControl').value.id;
+      this.project.start_date = this.projectForm.get('start_date').value;
+      this.project.end_date = this.projectForm.get('end_date').value;
 
-    this.projectsApi
-      .updateProject(this.project)
-      .subscribe(
-        () => this.router.navigate(['/projects']),
-        error => alert(error.message)
-      );
+      this.projectsApi
+        .updateProject(this.project)
+        .subscribe(
+          () => this.router.navigate(['/projects']),
+          error => alert(error.message)
+        );
+    } else {
+      this.snackBar.open("La date de début de commande doit être antérieure à la date de fin.", "Fermer");
+    }
   }
 
   updateClientEmployeeList(client) {

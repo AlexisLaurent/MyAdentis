@@ -68,7 +68,7 @@ export class ClientEditFormComponent implements OnInit {
     this.clientsApi
       .updateClient(this.client)
       .subscribe(
-        () => this.router.navigate(['/clients']),
+        () => this.router.navigate(['/clients/'+this.client.id]),
         error => alert(error.message)
       );
   }
@@ -80,8 +80,10 @@ export class ClientEditFormComponent implements OnInit {
   deleteClientEmployee(id) {
     this.clientEmployeesApi
       .deleteClientEmployee(id)
-      .subscribe(
-        err => console.log(err)
+      .subscribe( res => {
+          this.dataSource = new MatTableDataSource(res);
+        },
+        console.error
       );
   }
 

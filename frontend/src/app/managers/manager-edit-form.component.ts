@@ -68,7 +68,7 @@ export class ManagerEditFormComponent implements OnInit {
     this.managersApi
       .updateManager(this.manager)
       .subscribe(
-        () => this.router.navigate(['/managers']),
+        () => this.router.navigate(['/managers/'+this.manager.id]),
         error => alert(error.message)
       );
   }
@@ -80,8 +80,10 @@ export class ManagerEditFormComponent implements OnInit {
   deleteConsultant(id) {
     this.consultantsApi
       .deleteConsultant(id)
-      .subscribe(
-        err => console.log(err)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(res);
+        },
+        console.error
       );
   }
 

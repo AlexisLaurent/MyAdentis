@@ -49,6 +49,7 @@ import {MatListModule} from '@angular/material/list';
 import {AmazingTimePickerModule} from 'amazing-time-picker';
 import {SignaturePadModule} from 'angular2-signaturepad';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatSnackBarModule} from '@angular/material';
 
 const appRoutes: Routes = [
   { path: '', component: MeetingsComponent },
@@ -122,6 +123,7 @@ const appRoutes: Routes = [
     AmazingTimePickerModule,
     SignaturePadModule,
     MatRadioModule,
+    MatSnackBarModule,
   ],
   providers: [ClientEmployeesApiService, ClientsApiService,
               ConsultantsApiService, ManagersApiService, MeetingsApiService,

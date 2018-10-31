@@ -12,7 +12,6 @@ import {ConsultantsApiService} from './consultants-api.service';
 
 export class ConsultantsComponent {
   consultantsListSubs: Subscription;
-  consultantsList: Consultant[];
   dataSource: MatTableDataSource<Consultant>;
 
   constructor(private consultantsApi: ConsultantsApiService) { }
@@ -21,7 +20,6 @@ export class ConsultantsComponent {
     this.consultantsListSubs = this.consultantsApi
       .getConsultants()
       .subscribe(res => {
-          this.consultantsList = res;
           this.dataSource = new MatTableDataSource(res);
           this.dataSource.filterPredicate = function(data, filter: string): boolean {
             return data.firstName.toLowerCase().includes(filter) || data.lastName.toLowerCase().includes(filter);
@@ -44,8 +42,13 @@ export class ConsultantsComponent {
   deleteConsultant(id) {
     this.consultantsApi
       .deleteConsultant(id)
-      .subscribe(
-        err => console.log(err)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(res);
+          this.dataSource.filterPredicate = function(data, filter: string): boolean {
+            return data.firstName.toLowerCase().includes(filter) || data.lastName.toLowerCase().includes(filter);
+          };
+        },
+        console.error
       );
   }
 }

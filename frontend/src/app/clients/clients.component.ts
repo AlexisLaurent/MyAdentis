@@ -14,7 +14,6 @@ import {ClientsApiService} from './clients-api.service';
 export class ClientsComponent implements OnInit, OnDestroy {
 
   clientsListSubs: Subscription;
-  clientsList: Client[];
   dataSource: MatTableDataSource<Client>;
 
   constructor(private clientsApi: ClientsApiService, private router: Router,) { }
@@ -23,7 +22,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.clientsListSubs = this.clientsApi
       .getClients()
       .subscribe(res => {
-          this.clientsList = res;
           this.dataSource = new MatTableDataSource(res);
           this.dataSource.filterPredicate = function(data, filter: string): boolean {
             return data.name.toLowerCase().includes(filter) || data.city.toLowerCase().includes(filter);
@@ -46,8 +44,13 @@ export class ClientsComponent implements OnInit, OnDestroy {
   deleteClient(id) {
     this.clientsApi
       .deleteClient(id)
-      .subscribe(
-        err => console.log(err)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(res);
+          this.dataSource.filterPredicate = function(data, filter: string): boolean {
+            return data.name.toLowerCase().includes(filter) || data.city.toLowerCase().includes(filter);
+          };
+        },
+        console.error
       );
   }
 }

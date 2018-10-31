@@ -11,6 +11,7 @@ import {ClientsApiService} from '../clients/clients-api.service';
 import {ClientEmployee} from '../clientEmployees/clientEmployee.model';
 import {ClientEmployeesApiService} from '../clientEmployees/clientEmployees-api.service';
 import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'project-add-form',
@@ -33,7 +34,7 @@ export class ProjectAddFormComponent {
 
   date = new FormControl(new Date());
 
-  constructor(private projectsApi: ProjectsApiService, private consultantsApi: ConsultantsApiService, private clientsApi: ClientsApiService, private clientEmployeesApi: ClientEmployeesApiService, private formBuilder: FormBuilder, private router: Router) { }
+  constructor(private projectsApi: ProjectsApiService, private consultantsApi: ConsultantsApiService, private clientsApi: ClientsApiService, private clientEmployeesApi: ClientEmployeesApiService, private formBuilder: FormBuilder, private router: Router, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.project.start_date = new Date();
@@ -75,15 +76,19 @@ export class ProjectAddFormComponent {
   }
 
   saveProject() {
-    this.project.manager_id = 1;
-    this.project.consultant_id = this.projectForm.get('consultantControl').value.id;
-    this.project.client_id = this.projectForm.get('clientControl').value.id;
-    this.project.clientEmployee_id = this.projectForm.get('clientEmployeeControl').value.id;
-    this.projectsApi
-      .saveProject(this.project)
-      .subscribe(
-        () => this.router.navigate(['/projects']),
-        error => alert(error.message)
-      );
+    if(this.project.start_date < this.project.end_date){
+      this.project.manager_id = 1;
+      this.project.consultant_id = this.projectForm.get('consultantControl').value.id;
+      this.project.client_id = this.projectForm.get('clientControl').value.id;
+      this.project.clientEmployee_id = this.projectForm.get('clientEmployeeControl').value.id;
+      this.projectsApi
+        .saveProject(this.project)
+        .subscribe(
+          () => this.router.navigate(['/projects']),
+          error => alert(error.message)
+        );
+    } else {
+      this.snackBar.open("La date de début de commande doit être antérieure à la date de fin.", "Fermer");
+    }
   }
 }

@@ -14,7 +14,6 @@ import {Manager} from '../managers/manager.model';
 
 export class MeetingsComponent {
   meetingsListSubs: Subscription;
-  meetingsList: SimplifiedMeeting[];
 
   meeting = new SimplifiedMeeting();
   dataList = new Array<SimplifiedMeeting>();
@@ -26,7 +25,6 @@ export class MeetingsComponent {
     this.meetingsListSubs = this.meetingsApi
       .getSimplifiedMeetings()
       .subscribe(res => {
-          this.meetingsList = res;
           this.dataSource = new MatTableDataSource(res);
           this.dataSource.filterPredicate = function(data, filter: string): boolean {
             return data.subject.toLowerCase().includes(filter) || data.consultant.toLowerCase().includes(filter);
@@ -49,8 +47,13 @@ export class MeetingsComponent {
   deleteMeeting(id) {
     this.meetingsApi
       .deleteMeeting(id)
-      .subscribe(
-        err => console.log(err)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(res);
+          this.dataSource.filterPredicate = function(data, filter: string): boolean {
+            return data.subject.toLowerCase().includes(filter) || data.consultant.toLowerCase().includes(filter);
+          };
+        },
+        console.error
       );
   }
 }
